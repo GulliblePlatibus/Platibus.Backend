@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+    <Folder Include="Model\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Registry\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SimpleSoft.Mediator.Abstractions" Version="1.0.0" />
+    <PackageReference Include="StructureMap" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Management.Persistence\Management.Persistence.csproj" />
+  </ItemGroup>
+</Project>

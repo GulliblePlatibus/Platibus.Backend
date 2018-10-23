@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MessagingContracts\" />
+    <Folder Include="MessagingInfrastructure\" />
+    <Folder Include="MessagingInfrastructure\Factory\" />
+    <Folder Include="MessagingInfrastructure\Registry\" />
+    <Folder Include="MessagingInfrastructure\Mediators\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="SimpleSoft.Mediator.Abstractions" Version="1.0.0" />
+    <PackageReference Include="StructureMap" Version="4.7.0" />
+    <PackageReference Include="SimpleSoft.Mediator" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Management.Messagin.Contracts\obj\Debug\netstandard2.0\Management.Messagin.Contracts.assets.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Management.Domain\Management.Domain.csproj" />
+    <ProjectReference Include="..\Management.Queries\Management.Queries.csproj" />
+  </ItemGroup>
+</Project>
