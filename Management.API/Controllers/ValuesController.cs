@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace Management.API.Controllers
 {
-    [Route("api/users")]
+    [Route("api/")]
     [ApiController]
 	public class ValuesController : BaseController
     {
