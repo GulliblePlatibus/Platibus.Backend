@@ -5,14 +5,14 @@ namespace Management.Domain.Commands
 	public class CreateUserCommand : CommandWithIdResponse
     {
         public string Name { get; }
-		public string Address { get; }
-		public int Age { get; }
+		public string Email { get; }
+		public string Password { get; }
 
-		public CreateUserCommand(string name, int age, string address)
-        {
-            Age = age;
-			Address = address;
+		public CreateUserCommand(string name, string email, string password)
+		{
 			Name = name;
+			Email = email;
+			Password = password;
 		}
     }
 }

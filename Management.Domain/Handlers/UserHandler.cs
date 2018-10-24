@@ -23,21 +23,18 @@ namespace Management.Domain.Handlers
 		{
 			//Do some logics, save the result in the persistence and return response indicating the succes state of the 
 
-			var userId = Guid.NewGuid();
+			var id = Guid.NewGuid();
+			
 			var result = await userRepository.InsertUser(new User
 			{
-				Id = userId,
+				Id = id,
+				Email = cmd.Email,
 				Name = cmd.Name,
-				Address = cmd.Address,
-				Age = cmd.Age
-			});         
-
-			if(!result.IsSuccessful)
-			{
-				return new IdResponse(Guid.Empty, false);
-			}
-
-			return new IdResponse(userId);
+				Password = cmd.Password
+			});
+			
+			
+			return new IdResponse(id);
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace Management.Persistence.Repositories
 	public class UserRepository : IUserRepository
     {
 
-		private List<User> UserStore = new List<User>();
+		private static List<User> UserStore = new List<User>();
 
         public UserRepository()
         {
@@ -45,7 +45,10 @@ namespace Management.Persistence.Repositories
 				{
 					return new Response(false, null, "User with id: " + user.Id + " already exists");
 				}
+				
 			}
+			
+			UserStore.Add(user);
 
 			return Response.Success();
 		}
