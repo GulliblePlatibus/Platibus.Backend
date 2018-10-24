@@ -39,14 +39,15 @@ namespace Management.API.Controllers
 		[Route("")]
 		public async Task<IActionResult> CreateUser([FromBody]CreateUserRequestModel requestModel)
 		{
-			var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(new CreateUserCommand(requestModel.Name, requestModel.Age, requestModel.Addres));
+			var result = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
+				new CreateUserCommand(requestModel.Name, requestModel.Email, requestModel.Password));
 
-			if(!response.IsSuccessful)
+			if (!result.IsSuccessful)
 			{
-				return StatusCode(401, response.Message);
+				return StatusCode(400, result.Message);
 			}
 
-			return new ObjectResult(response.Id);
+			return StatusCode(200);
 		}
 
 		[HttpGet]
