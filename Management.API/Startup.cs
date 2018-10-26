@@ -31,6 +31,17 @@ namespace Management.API
 			//API doesn't work without this is due to the fact that AddMVC adds both razor and json formatting that enabled the api to receive and transmit data smoothly --> https://offering.solutions/blog/articles/2017/02/07/difference-between-addmvc-addmvcore/
 			services.AddMvc();
 
+			//Configure Platibus.Backend to use identityServer
+			services.AddAuthentication("Bearer")
+				.AddIdentityServerAuthentication(x =>
+				{
+					x.Authority = "https://localhost:5001";
+					x.RequireHttpsMetadata = false;
+					x.ApiName = "Platibus.Backend";
+				});
+			services.AddAuthorization();
+
+			services.AddCors();
             //For fun swagger settings...
 			services.AddSwaggerGen(c =>
 			{
@@ -47,7 +58,6 @@ namespace Management.API
 
 			//The api comes with standard dependency-injection, which is not that complicated nor have much functionality.
 			//So we can re-configure the IOC container with our StructureMapRegistry.
-
 			var container = new Container(new WebRegistry());
 
 			//The head of the container or dependency-injection tree has been set to the WebRegistry which conviniently includes, our MessaginRegistry and the tree will be build until there are no further registries to include.
@@ -91,6 +101,9 @@ namespace Management.API
 
             //Pre-configs from template
 			app.UseHttpsRedirection();
+
+			app.UseAuthentication();
+			
 			app.UseMvc();
 		}
 	}
