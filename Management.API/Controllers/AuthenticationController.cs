@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
@@ -5,6 +6,7 @@ using Management.Domain.Commands;
 using Management.Infrastructure.MessagingContracts;
 using Management.Persistence.Model;
 using Management.Queries.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Management.API.Controllers
@@ -17,7 +19,6 @@ namespace Management.API.Controllers
         {
             
         }
-
 
         [HttpPost]
         [Route("")]
@@ -46,6 +47,14 @@ namespace Management.API.Controllers
             }
             
             return new ObjectResult(result);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("")]
+        public async Task<IActionResult> Authorize()
+        {
+            return new JsonResult(from c in User.Claims select new {c.Type , c.Value});
         }
         
     }
