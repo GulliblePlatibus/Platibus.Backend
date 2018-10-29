@@ -18,9 +18,9 @@ namespace Management.Persistence.Model
             EndDate = endDate;
         }
 
-        public void Approve(AdministratitiveDirector approver)
+        public void Approve(AdministratitiveDirector approvedBy) //Approval class?
         {
-            ApprovedBy = approver;
+            ApprovedBy = approvedBy;
             ApprovalDateTime = DateTime.Now;
         }
 
