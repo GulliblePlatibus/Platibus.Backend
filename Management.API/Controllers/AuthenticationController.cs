@@ -17,7 +17,6 @@ namespace Management.API.Controllers
     {
         public AuthenticationController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter, queryRouter)
         {
-            
         }
 
         [HttpPost]
