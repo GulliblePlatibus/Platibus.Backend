@@ -19,16 +19,27 @@ namespace Management.Persistence.Repositories
 
 	public class UserRepository : IUserRepository
     {
+	    // Database object
+	    private readonly IBaseDatabase _baseDatabase;
 
-		private static List<User> UserStore = new List<User>();
+	    private static List<User> UserStore = new List<User>();
 
-        public UserRepository()
+	    
+	    
+        public UserRepository(IBaseDatabase baseDatabase)
         {
-            //Do database config here!
+
+	        _baseDatabase = baseDatabase;
+	        
+	        
         }
 
 		public async Task<User> GetById(Guid id)
 		{
+
+			// Insert to DB
+			//_baseDatabase.Insert("INSER TO DB");
+			
 			await Task.Delay(1000);
 
 			foreach(var user in UserStore)
@@ -62,6 +73,8 @@ namespace Management.Persistence.Repositories
 
 	    public Task<User> Login(string email, string password)
 	    {
+
+		    
 		    var emailList = UserStore.Where(x => x.Email.Equals(email) && BCrypt.Net.BCrypt.Verify(password, x.Password));
 
 		    var user =  emailList.GetFirstElement();
