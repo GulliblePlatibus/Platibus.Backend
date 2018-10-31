@@ -16,7 +16,7 @@ namespace Management.API.Controllers
         [Route("getUsers")]
         public async Task<IActionResult> GetALLUsers()
         {
-            
+            return null;
         }
        
     }

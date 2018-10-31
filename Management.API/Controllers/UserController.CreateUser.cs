@@ -16,15 +16,8 @@ using Newtonsoft.Json;
 
 namespace Management.API.Controllers
 {
-    [Route("api/users")]
-    [ApiController]
     public partial class UserController : BaseController
     {
-        public UserController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter,
-            queryRouter)
-        {
-        }
-
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestModel requestModel)
