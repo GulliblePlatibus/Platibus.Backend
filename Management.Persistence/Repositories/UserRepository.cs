@@ -19,19 +19,17 @@ namespace Management.Persistence.Repositories
 
 	public class UserRepository : IUserRepository
     {
+	    private readonly IBaseDatabase<TestUser> _userDatabaseHandler;
 	    // Database object
-	    private readonly IBaseDatabase _baseDatabase;
+	    
 
 	    private static List<User> UserStore = new List<User>();
 
 	    
 	    
-        public UserRepository(IBaseDatabase baseDatabase)
+        public UserRepository(IBaseDatabase<TestUser> UserDatabaseHandler)
         {
-
-	        _baseDatabase = baseDatabase;
-	        
-	        
+	        _userDatabaseHandler = UserDatabaseHandler;
         }
 
 		public async Task<User> GetById(Guid id)
