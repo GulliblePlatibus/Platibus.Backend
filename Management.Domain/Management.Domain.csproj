@@ -9,7 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
-    <Folder Include="Handlers\" />
+    <Folder Include="CommandHandlers\" />
     <Folder Include="Registry\" />
     <Folder Include="Documents\" />
   </ItemGroup>
