@@ -28,7 +28,8 @@ namespace Management.Persistence.Repositories
 
 	    public async Task<User> GetUsersAsync()
 	    {
-		   var result = 
+            User result = null;
+            return (result);
 	    }
 
 

@@ -22,7 +22,7 @@ namespace Management.Domain.QueryHandler
 
         public async Task<IEnumerable<User>> HandleAsync(GetUsers query, CancellationToken ct)
         {
-          _userRepository.
+            return null;
         }
     }
 }
