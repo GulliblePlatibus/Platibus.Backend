@@ -35,8 +35,8 @@ namespace Management.Persistence.Repositories
 		public async Task<User> GetById(Guid id)
 		{
 
-			// Insert to DB
-			//_baseDatabase.Insert("INSER TO DB");
+			// Get by id
+			//_userDatabaseHandler.GetById(id);
 			
 			await Task.Delay(1000);
 
@@ -53,7 +53,8 @@ namespace Management.Persistence.Repositories
 		public async Task<Response> InsertUser(User user)
 		{
 
-
+			// Insert the user to the db
+			//_userDatabaseHandler.Insert(user)
 			var result = UserStore.Where(x => x.Email.Equals(user.Email));
 
 			if (result.Any())

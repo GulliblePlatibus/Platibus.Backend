@@ -16,19 +16,19 @@ namespace Management.Persistence
     public class UserDatabaseHandler : IBaseDatabase<TestUser>
     {
         // 
-        private readonly ElephantSQlConfig _elephantSQlConfig = null;
+        private readonly IConnectionString _connectionString = null;
 
 
         public UserDatabaseHandler()
         {
-            _elephantSQlConfig = new ElephantSQlConfig();
+            _connectionString = new ElephantSQlConfig();
             
         }
 
 
         public long Insert(TestUser value)
         {
-            using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
@@ -38,7 +38,7 @@ namespace Management.Persistence
 
         public long InsertMany(IEnumerable<TestUser> valueList)
         {
-            using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
@@ -48,7 +48,7 @@ namespace Management.Persistence
 
         public bool Update(TestUser value)
         {
-            using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
@@ -63,7 +63,7 @@ namespace Management.Persistence
                 return null;
             }
             
-            using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
@@ -78,7 +78,7 @@ namespace Management.Persistence
                 return false;
             }
             
-            using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
@@ -93,7 +93,7 @@ namespace Management.Persistence
                 return false;
             }
             
-            using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
