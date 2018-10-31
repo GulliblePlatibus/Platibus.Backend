@@ -22,7 +22,7 @@ namespace Management.Infrastructure.MessagingInfrastructure.Registry
 
 
 			IncludeRegistry<CommandRegistry>();
-			IncludeRegistry<QueryRegistry>();
+	        
 			IncludeRegistry<PersistenceRegistry>();
         }
     }

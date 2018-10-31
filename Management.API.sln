@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.API", "Managemen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Persistence", "Management.Persistence\Management.Persistence.csproj", "{8158F8FE-C798-4585-8D74-9931253A2560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Queries", "Management.Queries\Management.Queries.csproj", "{06201EE7-D428-4DFF-95F9-FE28E4D432B9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Domain", "Management.Domain\Management.Domain.csproj", "{1C2BA1AD-9566-428B-A6D8-47E247701C67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Infrastructure", "Management.Resources\Management.Infrastructure.csproj", "{914556CF-E067-4B55-A83C-E60D0AF44BF6}"
@@ -27,10 +25,6 @@ Global
 		{8158F8FE-C798-4585-8D74-9931253A2560}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8158F8FE-C798-4585-8D74-9931253A2560}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8158F8FE-C798-4585-8D74-9931253A2560}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06201EE7-D428-4DFF-95F9-FE28E4D432B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06201EE7-D428-4DFF-95F9-FE28E4D432B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06201EE7-D428-4DFF-95F9-FE28E4D432B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06201EE7-D428-4DFF-95F9-FE28E4D432B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C2BA1AD-9566-428B-A6D8-47E247701C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C2BA1AD-9566-428B-A6D8-47E247701C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C2BA1AD-9566-428B-A6D8-47E247701C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
