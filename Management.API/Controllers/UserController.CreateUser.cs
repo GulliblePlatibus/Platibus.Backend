@@ -18,9 +18,9 @@ namespace Management.API.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class CreateUserController : BaseController
+    public partial class UserController : BaseController
     {
-        public CreateUserController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter,
+        public UserController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter,
             queryRouter)
         {
         }
