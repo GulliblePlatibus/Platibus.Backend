@@ -29,7 +29,7 @@ namespace Management.API.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestModel requestModel)
         {
-            var baseurl = "https://www.google.dk/";
+            var baseurl = "http://localhost:5021/"+"identity/users";
 
             var httpClient = new HttpClient();
 
