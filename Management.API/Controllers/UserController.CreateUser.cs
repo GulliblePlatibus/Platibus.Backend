@@ -58,12 +58,5 @@ namespace Management.API.Controllers
         }
 
 
-        [HttpGet]
-        [Route("")]
-        public async Task<IActionResult> Getsome()
-        {
-            return new ObjectResult("ulsan ser alt");
-        }
-
     }
 }

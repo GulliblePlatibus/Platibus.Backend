@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Management.Domain.Queries;
 using Management.Infrastructure.MessagingContracts;
+using Management.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Management.API.Controllers
 {
-    [Route("api/user")]
+    [Route("api/users")]
     [ApiController]
     public partial class UserController : BaseController
     {
@@ -13,11 +16,24 @@ namespace Management.API.Controllers
         }
 
         [HttpGet]
-        [Route("getUsers")]
-        public async Task<IActionResult> GetALLUsers()
+        [Route("")]
+        public async Task<IActionResult> GetAllUsers(int page, int pageSize)
         {
-            return null;
+            var result = await QueryRouter.QueryAsync<GetUsers, IEnumerable<User>>(new GetUsers(page, pageSize));
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(result);
+            
         }
+        
+        
+            
+            
+            
+        
        
     }
 }

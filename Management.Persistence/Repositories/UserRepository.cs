@@ -11,30 +11,33 @@ using Management.Persistence.Helpers;
 namespace Management.Persistence.Repositories
 {
     public interface IUserRepository
-	{
+    {
+	    Task<User> GetUsersAsync();
 		Task<User> GetById(Guid id);
 		Task<Response> InsertUser(User user);
 		Task<User> Login(string email, string password);
 	}
 
-	public class UserRepository : IUserRepository
+	public class UserRepository : BaseDatabase, IUserRepository
     {
 	    // Database object
 	    private readonly IBaseDatabase _baseDatabase;
 
 	    private static List<User> UserStore = new List<User>();
-
 	    
-	    
-        public UserRepository(IBaseDatabase baseDatabase)
-        {
 
-	        _baseDatabase = baseDatabase;
-	        
-	        
-        }
+	    public async Task<User> GetUsersAsync()
+	    {
+		   var result = 
+	    }
 
-		public async Task<User> GetById(Guid id)
+
+	    public Task<User> GetUsers()
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public async Task<User> GetById(Guid id)
 		{
 
 			// Insert to DB
@@ -54,21 +57,19 @@ namespace Management.Persistence.Repositories
 
 		public async Task<Response> InsertUser(User user)
 		{
-
-
+			//Insert();
+			
 			var result = UserStore.Where(x => x.Email.Equals(user.Email));
 
 			if (result.Any())
 			{
 				return new Response(false, null, "User with email: " + user.Email + " already exists");
 			}
-			
-			
-			
-			
+
 			UserStore.Add(user);
 
 			return Response.Success();
+			
 		}
 
 	    public Task<User> Login(string email, string password)
@@ -82,5 +83,7 @@ namespace Management.Persistence.Repositories
 		    return Task.FromResult(user);
 
 	    }
+
+	    
     }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
-using Microsoft.IdentityModel.Protocols;
+using Management.Persistence.Model;
+//using Microsoft.IdentityModel.Protocols;
 using Npgsql;
 
 namespace Management.Persistence.Repositories
@@ -14,6 +16,7 @@ namespace Management.Persistence.Repositories
     }
     public interface IBaseDatabase
     {
+    //    Task<User> GetById(Guid id);
         void Insert(string value);
         void DapperTest();
     }
@@ -29,6 +32,15 @@ namespace Management.Persistence.Repositories
             
         }
 
+/*
+        public Task<User> GetById(Guid id)
+        {
+          //  using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
+            {
+                
+            }
+        }
+*/
         public void Insert(string value)
         {
             using (var conn = new NpgsqlConnection(_elephantSQlConfig.GetConnectionString()))
