@@ -3,6 +3,7 @@ using SimpleSoft.Mediator;
 using Management.Domain.Commands;
 using System.Threading;
 using System.Threading.Tasks;
+using EmailValidation;
 using Management.Documents.Documents;
 using Management.Persistence.Repositories;
 using Management.Persistence.Model;
@@ -23,6 +24,19 @@ namespace Management.Domain.Handlers
 		{
 			//Do some logics, save the result in the persistence and return response indicating the succes state of the 
 
+			if (string.IsNullOrEmpty(cmd.Name))
+			{
+				return new IdResponse(Guid.Empty , false );
+			}
+
+			if (!EmailValidator.Validate(cmd.Email))
+			{
+				return new IdResponse(Guid.Empty , false);
+			}
+			
+			
+			
+			
 			var id = Guid.NewGuid();
 			
 			var result = await userRepository.InsertUser(new User
@@ -30,9 +44,13 @@ namespace Management.Domain.Handlers
 				Id = id,
 				Email = cmd.Email,
 				Name = cmd.Name,
-				Password = cmd.Password
+				Password = BCrypt.Net.BCrypt.HashPassword(cmd.Password)
 			});
-			
+
+			if (!result.IsSuccessful)
+			{
+				return new IdResponse(Guid.Empty , false);
+			}
 			
 			return new IdResponse(id);
 		}
