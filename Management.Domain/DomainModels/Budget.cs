@@ -1,7 +1,7 @@
 using System;
-using System.Data.SqlTypes;
+using Management.Domain.DomainModels.Users;
 
-namespace Management.Persistence.Model
+namespace Management.Domain.DomainModels
 {
     public class Budget
     {

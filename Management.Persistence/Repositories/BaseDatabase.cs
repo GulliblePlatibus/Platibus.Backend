@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Management.Persistence.Model;
+
 //using Microsoft.IdentityModel.Protocols;
 using Npgsql;
 

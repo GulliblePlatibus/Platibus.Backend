@@ -1,6 +1,6 @@
 using System;
 
-namespace Management.Persistence.Model
+namespace Management.Domain.DomainModels.Schedule
 {
     public class Shift
     {

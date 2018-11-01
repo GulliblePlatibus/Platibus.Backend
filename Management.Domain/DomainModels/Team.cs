@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
+using Management.Domain.DomainModels.Users;
 
-namespace Management.Persistence.Model
+namespace Management.Domain.DomainModels
 {
     public class Team
     {

@@ -1,8 +1,10 @@
 ﻿using System;
+using Management.Acquaintance;
 using Management.Persistence.Documents;
-namespace Management.Persistence.Model
+
+namespace Management.Domain.DomainModels.Users
 {
-	public class User : IEntity
+	public class User : IEntity, IUser
     {
 		public Guid Id { get; set; }
 

@@ -20,6 +20,7 @@
     <PackageReference Include="StructureMap" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Management.Acquaintance\Management.Acquaintance.csproj" />
     <ProjectReference Include="..\Management.Documents\Management.Documents.csproj" />
     <ProjectReference Include="..\Management.Persistence\Management.Persistence.csproj" />
   </ItemGroup>

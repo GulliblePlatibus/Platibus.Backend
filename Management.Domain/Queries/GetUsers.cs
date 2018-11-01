@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Management.Persistence.Model;
+using Management.Domain.DomainModels.Users;
 using SimpleSoft.Mediator;
 
 namespace Management.Domain.Queries

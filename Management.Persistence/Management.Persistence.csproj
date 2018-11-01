@@ -8,7 +8,6 @@
     <Compile Remove="Class1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="Repositories\" />
     <Folder Include="Registry\" />
     <Folder Include="Configuration\" />
@@ -21,6 +20,7 @@
     <PackageReference Include="StructureMap" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Management.Acquaintance\Management.Acquaintance.csproj" />
     <ProjectReference Include="..\Management.Documents\Management.Documents.csproj" />
   </ItemGroup>
   <ItemGroup>

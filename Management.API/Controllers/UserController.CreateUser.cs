@@ -7,7 +7,6 @@ using Management.API.RequestModels;
 using Management.Documents.Documents;
 using Management.Domain.Commands;
 using Management.Infrastructure.MessagingContracts;
-using Management.Persistence.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2;

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Management.Domain.DomainModels.Users;
 using Management.Domain.Queries;
 using Management.Infrastructure.MessagingContracts;
-using Management.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Management.API.Controllers

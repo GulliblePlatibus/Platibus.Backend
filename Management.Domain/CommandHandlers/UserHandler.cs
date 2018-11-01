@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using EmailValidation;
 using Management.Documents.Documents;
 using Management.Persistence.Repositories;
-using Management.Persistence.Model;
+using Management.Domain.DomainModels;
+using Management.Domain.DomainModels.Users;
 
 namespace Management.Domain.Handlers
 {

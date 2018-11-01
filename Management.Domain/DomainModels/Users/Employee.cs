@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Management.Domain.DomainModels.Schedule;
 
-namespace Management.Persistence.Model
+namespace Management.Domain.DomainModels.Users
 {
     public class Employee : User
     {

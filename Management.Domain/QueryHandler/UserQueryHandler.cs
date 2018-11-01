@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Management.Domain.DomainModels.Users;
 using Management.Domain.Queries;
-using Management.Persistence.Model;
 using Management.Persistence.Repositories;
 using SimpleSoft.Mediator;
 

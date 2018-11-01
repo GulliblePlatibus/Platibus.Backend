@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Management.Persistence.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Management.Documents.Documents;
 using Management.Persistence.Helpers;
+using Management.Acquaintance;
 
 namespace Management.Persistence.Repositories
 {
     public interface IUserRepository
     {
-	    Task<User> GetUsersAsync();
-		Task<User> GetById(Guid id);
-		Task<Response> InsertUser(User user);
-		Task<User> Login(string email, string password);
+	    Task<IUser> GetUsersAsync();
+		Task<IUser> GetById(Guid id);
+		Task<Response> InsertUser(IUser user);
+		Task<IUser> Login(string email, string password);
 	}
 
 	public class UserRepository : BaseDatabase, IUserRepository
@@ -23,22 +23,22 @@ namespace Management.Persistence.Repositories
 	    // Database object
 	    private readonly IBaseDatabase _baseDatabase;
 
-	    private static List<User> UserStore = new List<User>();
+	    private static List<IUser> UserStore = new List<IUser>();
 	    
 
-	    public async Task<User> GetUsersAsync()
+	    public async Task<IUser> GetUsersAsync()
 	    {
-            User result = null;
+            IUser result = null;
             return (result);
 	    }
 
 
-	    public Task<User> GetUsers()
+	    public Task<IUser> GetUsers()
 	    {
 		    throw new NotImplementedException();
 	    }
 
-	    public async Task<User> GetById(Guid id)
+	    public async Task<IUser> GetById(Guid id)
 		{
 
 			// Insert to DB
@@ -56,7 +56,7 @@ namespace Management.Persistence.Repositories
 			return null;
 		}
 
-		public async Task<Response> InsertUser(User user)
+		public async Task<Response> InsertUser(IUser user)
 		{
 			//Insert();
 			
@@ -73,7 +73,7 @@ namespace Management.Persistence.Repositories
 			
 		}
 
-	    public Task<User> Login(string email, string password)
+	    public Task<IUser> Login(string email, string password)
 	    {
 
 		    

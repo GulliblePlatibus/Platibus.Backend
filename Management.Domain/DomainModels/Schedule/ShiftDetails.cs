@@ -1,4 +1,6 @@
-namespace Management.Persistence.Model
+using Management.Domain.DomainModels.Users;
+
+namespace Management.Domain.DomainModels.Schedule
 {
     public class ShiftDetails
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Management.Persistence.Model
+namespace Management.Domain.DomainModels.Users
 {
     public class Manager : User
     {
