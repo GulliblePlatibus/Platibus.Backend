@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using StructureMap;
 using Management.API.Registry;
+using Management.Persistence.Helpers;
 
 namespace Management.API
 {
@@ -28,6 +29,9 @@ namespace Management.API
 		// This method gets called by the runtime. Use this method to configure the API before instantiation.
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
+			//Configure ConfigurationFiles
+			services.Configure<ElephantSQLConfiguration>(Configuration.GetSection(nameof(ElephantSQLConfiguration)));
+			
 			//API doesn't work without this is due to the fact that AddMVC adds both razor and json formatting that enabled the api to receive and transmit data smoothly --> https://offering.solutions/blog/articles/2017/02/07/difference-between-addmvc-addmvcore/
 			services.AddMvc();
 
