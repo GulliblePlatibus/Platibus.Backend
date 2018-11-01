@@ -1,48 +1,42 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Management.Persistence.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Management.Documents.Documents;
 using Management.Persistence.Helpers;
-using Management.Acquaintance;
 
 namespace Management.Persistence.Repositories
 {
     public interface IUserRepository
-    {
-	    Task<IUser> GetUsersAsync();
-		Task<IUser> GetById(Guid id);
-		Task<Response> InsertUser(IUser user);
-		Task<IUser> Login(string email, string password);
+	{
+		Task<User> GetById(Guid id);
+		Task<Response> InsertUser(User user);
+		Task<User> Login(string email, string password);
 	}
 
-	public class UserRepository : BaseDatabase, IUserRepository
+	public class UserRepository : IUserRepository
     {
+	    private readonly IBaseDatabase<TestUser> _userDatabaseHandler;
 	    // Database object
-	    private readonly IBaseDatabase _baseDatabase;
-
-	    private static List<IUser> UserStore = new List<IUser>();
 	    
 
-	    public async Task<IUser> GetUsersAsync()
-	    {
-            IUser result = null;
-            return (result);
-	    }
+	    private static List<User> UserStore = new List<User>();
 
+	    
+	    
+        public UserRepository(IBaseDatabase<TestUser> UserDatabaseHandler)
+        {
+	        _userDatabaseHandler = UserDatabaseHandler;
+        }
 
-	    public Task<IUser> GetUsers()
-	    {
-		    throw new NotImplementedException();
-	    }
-
-	    public async Task<IUser> GetById(Guid id)
+		public async Task<User> GetById(Guid id)
 		{
 
-			// Insert to DB
-			//_baseDatabase.Insert("INSER TO DB");
+			// Get by id
+			//_userDatabaseHandler.GetById(id);
 			
 			await Task.Delay(1000);
 
@@ -56,24 +50,27 @@ namespace Management.Persistence.Repositories
 			return null;
 		}
 
-		public async Task<Response> InsertUser(IUser user)
+		public async Task<Response> InsertUser(User user)
 		{
-			//Insert();
-			
+
+			// Insert the user to the db
+			//_userDatabaseHandler.Insert(user)
 			var result = UserStore.Where(x => x.Email.Equals(user.Email));
 
 			if (result.Any())
 			{
 				return new Response(false, null, "User with email: " + user.Email + " already exists");
 			}
-
+			
+			
+			
+			
 			UserStore.Add(user);
 
 			return Response.Success();
-			
 		}
 
-	    public Task<IUser> Login(string email, string password)
+	    public Task<User> Login(string email, string password)
 	    {
 
 		    
@@ -84,7 +81,5 @@ namespace Management.Persistence.Repositories
 		    return Task.FromResult(user);
 
 	    }
-
-	    
     }
 }

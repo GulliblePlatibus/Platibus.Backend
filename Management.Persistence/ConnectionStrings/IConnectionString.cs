@@ -1,4 +1,4 @@
-namespace Management.Persistence.Repositories
+namespace Management.Persistence
 {
     public interface IConnectionString
     {
