@@ -34,7 +34,7 @@ namespace Management.Domain.Handlers
 			
 			var result = await userRepository.InsertUser(new User
 			{
-				Id = "testhansi1234",
+				Id = id,
 				Email = cmd.Email,
 				Name = cmd.Name,
 				Password = BCrypt.Net.BCrypt.HashPassword(cmd.Password)
