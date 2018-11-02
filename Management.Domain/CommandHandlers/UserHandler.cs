@@ -26,7 +26,8 @@ namespace Management.Domain.Handlers
 
 			if (string.IsNullOrEmpty(cmd.Name))
 			{
-				return new IdResponse(Guid.Empty , false );
+				return  IdResponse.Unsuccessful("cannot create user with an empty name");
+				
 			}
 			
 			var id = Guid.NewGuid();

@@ -4,7 +4,6 @@ using Management.Infrastructure.MessagingInfrastructure.Factory;
 using Management.Infrastructure.MessagingContracts;
 using Management.Infrastructure.MessagingInfrastructure.Mediators;
 using Management.Domain.Registry;
-using Management.Queries.Registry;
 using Management.Persistence.Registry;
 
 
@@ -22,7 +21,7 @@ namespace Management.Infrastructure.MessagingInfrastructure.Registry
 
 
 			IncludeRegistry<CommandRegistry>();
-			IncludeRegistry<QueryRegistry>();
+	        
 			IncludeRegistry<PersistenceRegistry>();
         }
     }
