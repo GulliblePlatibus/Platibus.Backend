@@ -14,12 +14,12 @@ namespace Management.Domain.Handlers
 	ICommandHandler<CreateUserCommand, IdResponse>
     {
 		private readonly IUserRepository userRepository;
-	    private readonly IManagerRepository _managerRepository;
+	   
 
-	    public UserHandler(IUserRepository userRepository , IManagerRepository managerRepository)
+	    public UserHandler(IUserRepository userRepository)
 	    {
 		    this.userRepository = userRepository;
-		    _managerRepository = managerRepository;
+		   
 	    }
 
 		public async Task<IdResponse> HandleAsync(CreateUserCommand cmd, CancellationToken ct)
@@ -47,19 +47,20 @@ namespace Management.Domain.Handlers
 			
 			var id = Guid.NewGuid();
 
-			var result = await _managerRepository.InsertManager(new Manager()
+			var result = await userRepository.InsertAsync(new User()
 			{
 				Email = cmd.Email,
 				Id = id,
 				Name = cmd.Name,
-				test = cmd.Email
+				AccessLevel = cmd._acceslevel,
+				
 			});
-
-			if (!result.IsSuccessful)
+/*
+			if (!)
 			{
 				return new IdResponse(Guid.Empty , false);
 			}
-			
+			*/
 			return new IdResponse(id);
 		}
 	}

@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Dommel;
 using Management.Persistence.Documents;
@@ -10,13 +13,20 @@ namespace Management.Persistence.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
+    //***********************PROPERTIES ***************************
+
         private readonly IConnectionString _connectionString;
+        
+    //***********************CONSTRUCTOR ***************************
 
         public BaseRepository(IConnectionString connectionString)
         {
             _connectionString = connectionString;
         }
+    //********************* METHODS ******************************************//
         
+    //***********************INSERT ***************************
+    
         public async Task<object> InsertAsync(T value)
         {
             using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
@@ -24,7 +34,7 @@ namespace Management.Persistence.Repositories
                 conn.Open();
 
                 
-                var a = conn.Insert(value);
+                var a = await conn.InsertAsync(value);
                 Console.WriteLine(a.GetType());
                 return a;
             }
@@ -40,6 +50,7 @@ namespace Management.Persistence.Repositories
                 return a as T;
             }
         }
+    //***********************UPDATE ***************************
 
         public async Task<bool> UpdateAsync(T value)
         {
@@ -50,6 +61,7 @@ namespace Management.Persistence.Repositories
                 return conn.Update(value);
             }
         }
+    //***********************GET ***************************
 
         public async Task<T> GetByIdAsync(Guid id)
         {
@@ -65,6 +77,17 @@ namespace Management.Persistence.Repositories
                 return conn.Get<T>(id);
             }
         }
+
+        public async Task<IEnumerable<T>> GetAllAsync() 
+        {
+            using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
+            {
+                conn.Open();
+
+                return await conn.GetAllAsync<T>();
+            }
+        }
+    //***********************DELETE ***************************
 
         public async Task<bool> DeleteByTAsync(T value)
         {

@@ -10,61 +10,31 @@ using Management.Persistence.Helpers;
 
 namespace Management.Persistence.Repositories
 {
-    public interface IUserRepository : IBaseRepository<Employee>
-	{
-		Task<User> GetById(Guid id);
-		Task<Response> InsertUser(Employee employee);
-		Task<User> Login(string email, string password);
-	}
-
-	public class UserRepository :  BaseRepository<Employee> , IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
 	    
-
-	    //***********************PROPERTIES ***************************
-	    
-	    private static List<User> UserStore = new List<User>();
-
-	    
-	    
-	    
-	    //**********************CONSTRUCTOR ****************************
-	    
-        public UserRepository(IConnectionString connectionString) : base (connectionString)
-        {
-	        
-        }
-	    
-	    // ********************* METHODS *******************************
-
-		public async Task<User> GetById(Guid id)
-		{
-
-			return null;
-		}
-
-		public async Task<Response> InsertUser(Employee employee)
-		{
-
-			
-			
-
-			var result = InsertAsync(employee);
-			
-			
-
-			if (result.Equals(1))
-			{
-				return Response.Unsuccessful();
-			}
-
-			return Response.Success();
-		}
-
-	    public Task<User> Login(string email, string password)
-	    {
-		    throw new NotImplementedException();
-
-	    }
     }
+
+	public class UserRepository : BaseRepository<User>, IUserRepository
+	{
+
+
+		//***********************PROPERTIES ***************************
+
+
+
+
+
+
+		//**********************CONSTRUCTOR ****************************
+
+		public UserRepository(IConnectionString connectionString) : base(connectionString)
+		{
+
+		}
+
+		// ********************* METHODS *******************************
+
+		
+	}
 }
