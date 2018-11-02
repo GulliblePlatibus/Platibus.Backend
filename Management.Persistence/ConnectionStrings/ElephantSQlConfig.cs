@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace Management.Persistence.Repositories
+namespace Management.Persistence
 {
     public class ElephantSQlConfig : IConnectionString
     {
