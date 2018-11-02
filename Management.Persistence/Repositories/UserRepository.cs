@@ -10,14 +10,14 @@ using Management.Persistence.Helpers;
 
 namespace Management.Persistence.Repositories
 {
-    public interface IUserRepository : IBaseRepository<User>
+    public interface IUserRepository : IBaseRepository<Employee>
 	{
 		Task<User> GetById(Guid id);
-		Task<Response> InsertUser(User user);
+		Task<Response> InsertUser(Employee employee);
 		Task<User> Login(string email, string password);
 	}
 
-	public class UserRepository :  BaseRepository<User> , IUserRepository
+	public class UserRepository :  BaseRepository<Employee> , IUserRepository
     {
 	    
 
@@ -43,10 +43,15 @@ namespace Management.Persistence.Repositories
 			return null;
 		}
 
-		public async Task<Response> InsertUser(User user)
+		public async Task<Response> InsertUser(Employee employee)
 		{
 
-			var result = await DeleteByTAsync(user);
+			
+			
+
+			var result = InsertAsync(employee);
+			
+			
 
 			if (result.Equals(1))
 			{
@@ -58,14 +63,7 @@ namespace Management.Persistence.Repositories
 
 	    public Task<User> Login(string email, string password)
 	    {
-
-		    
-		    
-		    var emailList = UserStore.Where(x => x.Email.Equals(email) && BCrypt.Net.BCrypt.Verify(password, x.Password));
-
-		    var user =  emailList.GetFirstElement();
-
-		    return Task.FromResult(user);
+		    throw new NotImplementedException();
 
 	    }
     }

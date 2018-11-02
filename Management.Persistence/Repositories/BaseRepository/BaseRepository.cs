@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dommel;
 using Management.Persistence.Documents;
+using Management.Persistence.Model;
 using Npgsql;
 
 namespace Management.Persistence.Repositories

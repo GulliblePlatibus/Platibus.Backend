@@ -1,35 +1,39 @@
+using System;
 using System.Collections.Generic;
+using System.IO.Compression;
+using Dapper.FluentMap.Dommel.Mapping;
 
 namespace Management.Persistence.Model
 {
+
+    public class EmployeeMap : DommelEntityMap<Employee>
+    {
+        public EmployeeMap()
+        {
+            
+            
+            ToTable("employee1");
+            Map(x => x.Id).ToColumn("id").IsKey();
+
+            Map(x => x.Name).ToColumn("name");
+            Map(x => x.Email).ToColumn("email");
+        }
+        
+    }
     public class Employee : User
     {
-        public double Wage { get; set; }
-        public Department Department { get; set; }
-        public List<Shift> Shifts { get; set; }
-        public List<Skill> Skills { get; set; }
-        public EmployeeInfo EmployeeInfo { get; set; }
+        
+       // public double Wage { get; set; }
+       // public Department Department { get; set; }
+       // public List<Shift> Shifts { get; set; }
+       // public List<Skill> Skills { get; set; }
+       // public EmployeeInfo EmployeeInfo { get; set; }
 
-        public Employee(double wage, Department department, EmployeeInfo employeeInfo)
+        public Employee() 
         {
-            Wage = wage;
-            Department = department;
-            EmployeeInfo = employeeInfo;
+
         }
 
-        /// <summary>
-        /// Takes an unlimited number of shifts and adds them to the employees shifts
-        /// </summary>
-        /// <param name="shifts"></param>
-        public void AssignShifts(params Shift[] shifts)
-        {
-            foreach (var shift in shifts)
-            {
-                if (!Shifts.Contains(shift))
-                {
-                  Shifts.Add(shift);  
-                }
-            }
-        }
+      
     }
 }

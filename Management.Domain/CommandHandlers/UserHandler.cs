@@ -14,11 +14,13 @@ namespace Management.Domain.Handlers
 	ICommandHandler<CreateUserCommand, IdResponse>
     {
 		private readonly IUserRepository userRepository;
+	    private readonly IManagerRepository _managerRepository;
 
-		public UserHandler(IUserRepository userRepository)
-        {
-            this.userRepository = userRepository;
-		}
+	    public UserHandler(IUserRepository userRepository , IManagerRepository managerRepository)
+	    {
+		    this.userRepository = userRepository;
+		    _managerRepository = managerRepository;
+	    }
 
 		public async Task<IdResponse> HandleAsync(CreateUserCommand cmd, CancellationToken ct)
 		{
@@ -31,13 +33,13 @@ namespace Management.Domain.Handlers
 			}
 			
 			var id = Guid.NewGuid();
-			
-			var result = await userRepository.InsertUser(new User
+
+			var result = await _managerRepository.InsertManager(new Manager()
 			{
-				Id = id,
 				Email = cmd.Email,
+				Id = id,
 				Name = cmd.Name,
-				Password = BCrypt.Net.BCrypt.HashPassword(cmd.Password)
+				test = cmd.Email
 			});
 
 			if (!result.IsSuccessful)

@@ -21,6 +21,7 @@ namespace Management.API.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestModel requestModel)
         {
+            /*
             var baseurl = "http://localhost:5021/"+"identity/users";
 
             var httpClient = new HttpClient();
@@ -44,6 +45,8 @@ namespace Management.API.Controllers
                 
                 return StatusCode((int)identityResult.StatusCode, identityResult.ReasonPhrase);
             }
+            
+            */
 
             var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
                 new CreateUserCommand(requestModel.Name, requestModel.Email, requestModel.Password));
@@ -55,8 +58,6 @@ namespace Management.API.Controllers
             
             return new ObjectResult(response.Id);
         }
-
-
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Getsome()
