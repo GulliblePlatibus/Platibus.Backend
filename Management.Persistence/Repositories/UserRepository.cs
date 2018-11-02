@@ -10,62 +10,48 @@ using Management.Persistence.Helpers;
 
 namespace Management.Persistence.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
 	{
 		Task<User> GetById(Guid id);
 		Task<Response> InsertUser(User user);
 		Task<User> Login(string email, string password);
 	}
 
-	public class UserRepository : IUserRepository
+	public class UserRepository :  BaseRepository<User> , IUserRepository
     {
-	    private readonly IBaseDatabase<TestUser> _userDatabaseHandler;
-	    // Database object
 	    
 
+	    //***********************PROPERTIES ***************************
+	    
 	    private static List<User> UserStore = new List<User>();
 
 	    
 	    
-        public UserRepository(IBaseDatabase<TestUser> UserDatabaseHandler)
+	    
+	    //**********************CONSTRUCTOR ****************************
+	    
+        public UserRepository(IConnectionString connectionString) : base (connectionString)
         {
-	        _userDatabaseHandler = UserDatabaseHandler;
+	        
         }
+	    
+	    // ********************* METHODS *******************************
 
 		public async Task<User> GetById(Guid id)
 		{
 
-			// Get by id
-			//_userDatabaseHandler.GetById(id);
-			
-			await Task.Delay(1000);
-
-			foreach(var user in UserStore)
-			{
-				if(user.Id.Equals(id))
-				{
-					return user;
-				}
-			}
 			return null;
 		}
 
 		public async Task<Response> InsertUser(User user)
 		{
 
-			// Insert the user to the db
-			//_userDatabaseHandler.Insert(user)
-			var result = UserStore.Where(x => x.Email.Equals(user.Email));
+			var result = await DeleteByTAsync(user);
 
-			if (result.Any())
+			if (result.Equals(1))
 			{
-				return new Response(false, null, "User with email: " + user.Email + " already exists");
+				return Response.Unsuccessful();
 			}
-			
-			
-			
-			
-			UserStore.Add(user);
 
 			return Response.Success();
 		}
@@ -73,6 +59,7 @@ namespace Management.Persistence.Repositories
 	    public Task<User> Login(string email, string password)
 	    {
 
+		    
 		    
 		    var emailList = UserStore.Where(x => x.Email.Equals(email) && BCrypt.Net.BCrypt.Verify(password, x.Password));
 

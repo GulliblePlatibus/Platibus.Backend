@@ -28,20 +28,12 @@ namespace Management.Domain.Handlers
 			{
 				return new IdResponse(Guid.Empty , false );
 			}
-
-			if (!EmailValidator.Validate(cmd.Email))
-			{
-				return new IdResponse(Guid.Empty , false);
-			}
-			
-			
-			
 			
 			var id = Guid.NewGuid();
 			
 			var result = await userRepository.InsertUser(new User
 			{
-				Id = id,
+				Id = "testhansi1234",
 				Email = cmd.Email,
 				Name = cmd.Name,
 				Password = BCrypt.Net.BCrypt.HashPassword(cmd.Password)

@@ -3,6 +3,6 @@ namespace Management.Persistence.Documents
 {
 	public interface IEntity
     {
-		Guid Id { get; }
+		string Id { get; }
     }
 }

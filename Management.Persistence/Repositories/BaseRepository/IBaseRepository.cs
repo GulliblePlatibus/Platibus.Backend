@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Management.Persistence.Documents;
 
 namespace Management.Persistence.Repositories
 {
-    public interface IBaseDatabase<T>
+    public interface IBaseRepository<T> where T : class, IEntity
     {
         /// <summary>
         ///
@@ -11,7 +13,7 @@ namespace Management.Persistence.Repositories
         /// </summary>
         /// <param name="value"></param>
         /// <returns>Affected rows</returns>
-        long Insert(T value);
+        Task<object> InsertAsync(T value);
         
         /// <summary>
         ///
@@ -19,7 +21,7 @@ namespace Management.Persistence.Repositories
         /// </summary>
         /// <param name="valueList"></param>
         /// <returns>Affected rows</returns>
-        long InsertMany(IEnumerable<T> valueList);
+        Task<object> InsertManyAsync(IEnumerable<T> valueList);
         
         
         /// <summary>
@@ -28,7 +30,7 @@ namespace Management.Persistence.Repositories
         /// </summary>
         /// <param name="value"></param>
         /// <returns>true if the object is updated</returns>
-        bool Update(T value);
+        Task<bool> UpdateAsync(T value);
         
         
         /// <summary>
@@ -36,7 +38,7 @@ namespace Management.Persistence.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns>The object that matches the id</returns>
-        T GetById(Guid id);
+        Task<T> GetByIdAsync(Guid id);
         
         
         /// <summary>
@@ -45,7 +47,7 @@ namespace Management.Persistence.Repositories
         /// </summary>
         /// <param name="value"></param>
         /// <returns>true if the object is deleted</returns>
-        bool DeleteByT(T value);
+        Task<bool> DeleteByTAsync(T value);
         
         
         /// <summary>
@@ -54,9 +56,7 @@ namespace Management.Persistence.Repositories
         /// </summary>
         /// <param name="valueList"></param>
         /// <returns>true if all the objects were deleted</returns>
-        bool DeleteMany(IEnumerable<T> valueList);
-        
-
+        Task<bool> DeleteManyAsync(IEnumerable<T> valueList);
 
     }
 }

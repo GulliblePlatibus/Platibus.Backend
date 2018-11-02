@@ -1,52 +1,46 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dapper;
-using Dapper.Contrib;
-using Dapper.Contrib.Extensions;
-using Management.Persistence.Model;
-using Management.Persistence.Repositories;
-using Microsoft.IdentityModel.Protocols;
+using System.Threading.Tasks;
+using Dommel;
+using Management.Persistence.Documents;
 using Npgsql;
 
-namespace Management.Persistence
+namespace Management.Persistence.Repositories
 {
-    
-
-    public class UserDatabaseHandler : IBaseDatabase<TestUser>
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
-        // 
-        private readonly IConnectionString _connectionString = null;
+        private readonly IConnectionString _connectionString;
 
-
-        public UserDatabaseHandler()
+        public BaseRepository(IConnectionString connectionString)
         {
-            _connectionString = new ElephantSQlConfig();
-            
+            _connectionString = connectionString;
         }
-
-
-        public long Insert(TestUser value)
+        
+        public async Task<object> InsertAsync(T value)
         {
             using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
-                return conn.Insert(value);
+                
+                var a = conn.Insert(value);
+                Console.WriteLine(a.GetType());
+                return a;
             }
         }
 
-        public long InsertMany(IEnumerable<TestUser> valueList)
+        public async Task<object> InsertManyAsync(IEnumerable<T> valueList)
         {
             using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
-                return conn.Insert(valueList);
+                var a = conn.Insert(valueList);
+                return a as T;
             }
         }
 
-        public bool Update(TestUser value)
+        public async Task<bool> UpdateAsync(T value)
         {
             using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
@@ -56,9 +50,9 @@ namespace Management.Persistence
             }
         }
 
-        public TestUser GetById(Guid id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
-            if (id.Equals(null))
+            if (id.Equals(Guid.Empty))
             {
                 return null;
             }
@@ -67,11 +61,11 @@ namespace Management.Persistence
             {
                 conn.Open();
 
-                return conn.Get<TestUser>(id);
+                return conn.Get<T>(id);
             }
         }
 
-        public bool DeleteByT(TestUser value)
+        public async Task<bool> DeleteByTAsync(T value)
         {
             if (value.Equals(null))
             {
@@ -86,7 +80,7 @@ namespace Management.Persistence
             }
         }
 
-        public bool DeleteMany(IEnumerable<TestUser> valueList)
+        public async Task<bool> DeleteManyAsync(IEnumerable<T> valueList)
         {
             if (valueList.Equals(null))
             {
@@ -99,9 +93,6 @@ namespace Management.Persistence
 
                 return conn.Delete(valueList);
             }
-            
         }
     }
-    
-    
 }
