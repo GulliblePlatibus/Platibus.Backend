@@ -21,15 +21,20 @@ namespace Management.API.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestModel requestModel)
         {
-            var baseurl = "http://localhost:5021/"+"identity/users";
+            var baseurl = _identityConfig.Value.IdentityServerUrl + "/identity/users";
 
             var httpClient = new HttpClient();
 
-            httpClient.DefaultRequestHeaders.Accept.Add(
-                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders
+                .Accept
+                .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
             
-            var httpContent = new StringContent(JsonConvert.SerializeObject(requestModel, Formatting.Indented), 
-                System.Text.Encoding.UTF8);
+            //Serialize object to json-format
+            var json = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
+            
+            //Httpcontent
+            var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             
             var identityResult = await httpClient.PostAsync(baseurl, httpContent);
 
@@ -55,14 +60,5 @@ namespace Management.API.Controllers
             
             return new ObjectResult(response.Id);
         }
-
-
-        [HttpGet]
-        [Route("")]
-        public async Task<IActionResult> Getsome()
-        {
-            return new ObjectResult("ulsan ser alt");
-        }
-
     }
 }

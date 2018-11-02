@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using Management.API.Helpers;
 using Management.Infrastructure.MessagingContracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Management.API.Controllers
 {
@@ -8,8 +10,11 @@ namespace Management.API.Controllers
     [ApiController]
     public partial class UserController : BaseController
     {
-        public UserController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter, queryRouter)
+        private readonly IOptions<IdentityServerConfiguration> _identityConfig;
+
+        public UserController(ICommandRouter commandRouter, IQueryRouter queryRouter, IOptions<IdentityServerConfiguration> identityConfig) : base(commandRouter, queryRouter)
         {
+            _identityConfig = identityConfig;
         }
 
         [HttpGet]
