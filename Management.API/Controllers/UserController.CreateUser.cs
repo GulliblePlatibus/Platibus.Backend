@@ -49,7 +49,7 @@ namespace Management.API.Controllers
             */
 
             var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
-                new CreateUserCommand(requestModel.Name, requestModel.Email, requestModel.Password));
+                new CreateUserCommand(requestModel.Name, requestModel.Email, requestModel.Password , requestModel.Acceslevel));
             
             if (!response.IsSuccessful)
             {

@@ -4,12 +4,14 @@ namespace Management.Domain.Commands
 {
 	public class CreateUserCommand : CommandWithIdResponse
     {
-        public string Name { get; }
+	    public int _acceslevel { get;  }
+	    public string Name { get; }
 		public string Email { get; }
 		public string Password { get; }
 
-		public CreateUserCommand(string name, string email, string password)
+		public CreateUserCommand(string name, string email, string password , int acceslevel)
 		{
+			_acceslevel = acceslevel;
 			Name = name;
 			Email = email;
 			Password = password;
