@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper.FluentMap;
+using Dapper.FluentMap.Dommel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +16,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using StructureMap;
 using Management.API.Registry;
 using Management.Persistence.Helpers;
+using Management.Persistence.Model;
 
 namespace Management.API
 {
@@ -64,6 +67,18 @@ namespace Management.API
 			//So we can re-configure the IOC container with our StructureMapRegistry.
 			var container = new Container(new WebRegistry());
 
+			
+			//Settings for Dapper fluentmap 
+			// Multiple ID's
+			// https://github.com/henkmollema/Dommel
+			FluentMapper.Initialize(options =>
+			{
+				options.AddMap(new MappingUser());
+				options.ForDommel();
+				
+			});
+			
+			
 			//The head of the container or dependency-injection tree has been set to the WebRegistry which conviniently includes, our MessaginRegistry and the tree will be build until there are no further registries to include.
 			//Start configuration by using structuremap configure API
 			container.Configure(config =>
