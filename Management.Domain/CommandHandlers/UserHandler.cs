@@ -11,7 +11,7 @@ using Management.Persistence.Model;
 namespace Management.Domain.Handlers
 {
 	public class UserHandler : 
-	ICommandHandler<CreateUserCommand, IdResponse>
+	ICommandHandler<CreateUserCommand, IdResponse> , ICommandHandler<DeleteUserByIdCommand , IdResponse> , ICommandHandler<UpdateUserCommand , IdResponse>
     {
 		private readonly IUserRepository userRepository;
 	   
@@ -63,5 +63,40 @@ namespace Management.Domain.Handlers
 			*/
 			return new IdResponse(id);
 		}
-	}
+
+	    public async Task<IdResponse> HandleAsync(DeleteUserByIdCommand cmd, CancellationToken ct)
+	    {
+		    if (cmd.Id.Equals(Guid.Empty))
+		    {
+			    return IdResponse.Unsuccessful("Id is empty");
+		    }
+		    
+
+		    var user = await userRepository.GetByIdAsync(cmd.Id);
+
+		    var result = await userRepository.DeleteByTAsync(user);
+		    return IdResponse.Successful(user.Id);
+	    }
+
+	    public async Task<IdResponse> HandleAsync(UpdateUserCommand cmd, CancellationToken ct)
+	    {
+		    if (cmd.Id.Equals(Guid.Empty))
+		    {
+			    return IdResponse.Unsuccessful("User id is empty");
+		    }
+
+		    var user = new User
+		    {
+			    Name = cmd.Name,
+			    Email = cmd.Email,
+			    AccessLevel = cmd.Acceslevel,
+			    Id = cmd.Id
+		    };
+
+		    var result = await userRepository.UpdateAsync(user);
+		    
+		    
+		    return IdResponse.Successful(user.Id);
+	    }
+    }
 }

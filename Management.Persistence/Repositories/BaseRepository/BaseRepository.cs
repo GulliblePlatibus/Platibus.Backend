@@ -58,7 +58,7 @@ namespace Management.Persistence.Repositories
             {
                 conn.Open();
 
-                return conn.Update(value);
+                return await conn.UpdateAsync(value);
             }
         }
     //***********************GET ***************************
