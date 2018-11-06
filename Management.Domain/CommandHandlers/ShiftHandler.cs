@@ -39,5 +39,39 @@ namespace Management.Domain.Handlers
             
             return new IdResponse(id);
         }
+        
+        public async Task<IdResponse> HandleAsync(DeleteShiftByIdCommand cmd, CancellationToken ct)
+        {
+            if (cmd.Id.Equals(Guid.Empty))
+            {
+                return IdResponse.Unsuccessful("Id is empty");
+            }
+		    
+
+            var shift = await ShiftRepository.GetByIdAsync(cmd.Id);
+
+            var result = await ShiftRepository.DeleteByTAsync(shift);
+            return IdResponse.Successful(shift.Id);
+        }
+
+        public async Task<IdResponse> HandleAsync(UpdateShiftCommand cmd, CancellationToken ct)
+        {
+            if (cmd.Id.Equals(Guid.Empty))
+            {
+                return IdResponse.Unsuccessful("User id is empty");
+            }
+
+            var Shift = new Shift
+            {
+                Id = cmd.Id,
+                ShiftStart = cmd.ShiftStart,
+                ShiftEnd = cmd.ShiftEnd,
+            };
+
+            var result = await ShiftRepository.UpdateAsync(Shift);
+		    
+		    
+            return IdResponse.Successful(Shift.Id);
+        }
     }
 }

@@ -4,8 +4,6 @@ using SimpleSoft.Mediator;
 
 namespace Management.Domain.Commands.ShiftCommands
 {
-    public class DeleateShiftByIdCommand
-    {
         public class DeleteShiftByIdCommand : Command<IdResponse>
         {
             public Guid Id { get; set; }
@@ -16,4 +14,3 @@ namespace Management.Domain.Commands.ShiftCommands
             }
         }
     }
-}
