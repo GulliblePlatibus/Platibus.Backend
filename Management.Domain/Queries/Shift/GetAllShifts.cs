@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using SimpleSoft.Mediator;
-using Management.Persistence.Model;
 
-namespace Management.Domain.Queries.Shift
+
+namespace Management.Domain.Queries
 {
     public class GetAllShifts : Query<IEnumerable<Persistence.Model.Shift>>
     {
