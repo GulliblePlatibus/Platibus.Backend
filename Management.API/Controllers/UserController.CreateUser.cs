@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Management.API.Helpers;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
 using Management.Domain.Commands;
@@ -21,8 +22,9 @@ namespace Management.API.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestModel requestModel)
         {
+            //baseurl for creating user on identityServer
             var baseurl = _identityConfig.Value.IdentityServerUrl + "/identity/users";
-
+            
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders
@@ -31,29 +33,34 @@ namespace Management.API.Controllers
 
             
             //Serialize object to json-format
-            var json = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(new CreateIdentityUser
+            {
+                AuthLevel = requestModel.Acceslevel,
+                Email = requestModel.Email,
+                Password = requestModel.Password
+            }, Formatting.Indented);
             
-            //Httpcontent
             var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             
+            //Create user on identityServer
             var identityResult = await httpClient.PostAsync(baseurl, httpContent);
 
+            //Evaluate if the result was succesful or not
             if (!identityResult.IsSuccessStatusCode)
-
             {
                 if (identityResult.Content != null)
                 {
                     var errorMsg = await identityResult.Content.ReadAsStringAsync();
                     return StatusCode((int)identityResult.StatusCode , errorMsg);
                 }
-                
                 return StatusCode((int)identityResult.StatusCode, identityResult.ReasonPhrase);
             }
-            
-            
 
+            //Since the result was succesfull, try and read the result for an id generated from the identityServer
+            var id = await ReadGuidFromResponse(identityResult);
+            
             var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
-                new CreateUserCommand(requestModel.Name, requestModel.Email, requestModel.Password , requestModel.Acceslevel));
+                new CreateUserCommand(id, requestModel.Name, requestModel.Email, requestModel.Password , requestModel.Acceslevel));
             
             if (!response.IsSuccessful)
             {
@@ -61,6 +68,16 @@ namespace Management.API.Controllers
             }
             
             return new ObjectResult(response.Id);
+        }
+
+
+        private async Task<Guid> ReadGuidFromResponse(HttpResponseMessage response)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+
+            var resultId = JsonConvert.DeserializeObject<CreateIdentityUserResult>(content);
+
+            return resultId.Id;
         }
     }
 }

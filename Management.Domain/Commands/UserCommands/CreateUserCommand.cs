@@ -4,13 +4,20 @@ namespace Management.Domain.Commands
 {
 	public class CreateUserCommand : CommandWithIdResponse
     {
+	    public Guid Id { get; }
 	    public int _acceslevel { get;  }
 	    public string Name { get; }
 		public string Email { get; }
 		public string Password { get; }
 
-		public CreateUserCommand(string name, string email, string password , int acceslevel)
+		public CreateUserCommand(Guid id, string name, string email, string password, int acceslevel)
 		{
+			if (id.Equals(Guid.Empty))
+			{
+				throw new ArgumentException(nameof(id) + " CreateUserCommand may not be initiated with a id value of Guid.Empty");
+			}
+			
+			Id = id;
 			_acceslevel = acceslevel;
 			Name = name;
 			Email = email;

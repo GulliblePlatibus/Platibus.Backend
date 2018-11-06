@@ -13,12 +13,12 @@ namespace Management.Domain.Handlers
 	public class UserHandler : 
 	ICommandHandler<CreateUserCommand, IdResponse> , ICommandHandler<DeleteUserByIdCommand , IdResponse> , ICommandHandler<UpdateUserCommand , IdResponse>
     {
-		private readonly IUserRepository userRepository;
+		private readonly IUserRepository _userRepository;
 	   
 
 	    public UserHandler(IUserRepository userRepository)
 	    {
-		    this.userRepository = userRepository;
+		    _userRepository = userRepository;
 		   
 	    }
 
@@ -44,10 +44,10 @@ namespace Management.Domain.Handlers
 				return  IdResponse.Unsuccessful("cannot create user with an empty name");
 				
 			}
-			
-			var id = Guid.NewGuid();
 
-			var result = await userRepository.InsertAsync(new User()
+			var id = cmd.Id;
+
+			var result = await _userRepository.InsertAsync(new User
 			{
 				Email = cmd.Email,
 				Id = id,
@@ -71,9 +71,9 @@ namespace Management.Domain.Handlers
 		    }
 		    
 
-		    var user = await userRepository.GetByIdAsync(cmd.Id);
+		    var user = await _userRepository.GetByIdAsync(cmd.Id);
 
-		    var result = await userRepository.DeleteByTAsync(user);
+		    var result = await _userRepository.DeleteByTAsync(user);
 		    return IdResponse.Successful(user.Id);
 	    }
 
@@ -92,7 +92,7 @@ namespace Management.Domain.Handlers
 			    Id = cmd.Id
 		    };
 
-		    var result = await userRepository.UpdateAsync(user);
+		    var result = await _userRepository.UpdateAsync(user);
 		    
 		    
 		    return IdResponse.Successful(user.Id);
