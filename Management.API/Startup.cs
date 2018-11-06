@@ -75,6 +75,7 @@ namespace Management.API
 			{
 				
 				options.AddMap(new UserMap());
+				options.AddMap(new ShiftMap());
 				options.ForDommel();
 				
 			});

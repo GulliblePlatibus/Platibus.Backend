@@ -52,8 +52,7 @@ namespace Management.Domain.Handlers
 				Email = cmd.Email,
 				Id = id,
 				Name = cmd.Name,
-				AccessLevel = cmd._acceslevel,
-				
+				AccessLevel = cmd._acceslevel
 			});
 /*
 			if (!)
