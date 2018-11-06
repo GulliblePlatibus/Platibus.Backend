@@ -4,7 +4,7 @@ using SimpleSoft.Mediator;
 
 namespace Management.Domain.Queries.Shift
 {
-    public class GetShiftById : Query<Persistence.Model.Shift>, IQuery<User>
+    public class GetShiftById : Query<Persistence.Model.Shift>
     {
         public Guid Id { get; set; }
 

@@ -51,7 +51,7 @@ namespace Management.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await QueryRouter.QueryAsync<GetShiftById, User>(new GetShiftById(id));
+            var result = await QueryRouter.QueryAsync<GetShiftById, Shift>(new GetShiftById(id));
 
             return new ObjectResult(result);
         }
