@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
@@ -20,6 +21,7 @@ namespace Management.API.Controllers
         public async Task<IActionResult> CreateShift([FromBody] CreateShiftRequestModel requestModel)
         {
 
+            Console.WriteLine();
             var response = await CommandRouter.RouteAsync<CreateShiftCommand, IdResponse>(
                 new CreateShiftCommand(requestModel.ShiftStart, requestModel.ShiftEnd));
 
