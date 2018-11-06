@@ -11,19 +11,34 @@ using Management.Persistence.Model;
 namespace Management.Domain.Handlers
 {
 	public class UserHandler : 
-	ICommandHandler<CreateUserCommand, IdResponse>
+	ICommandHandler<CreateUserCommand, IdResponse> , ICommandHandler<DeleteUserByIdCommand , IdResponse> , ICommandHandler<UpdateUserCommand , IdResponse>
     {
 		private readonly IUserRepository userRepository;
+	   
 
-		public UserHandler(IUserRepository userRepository)
-        {
-            this.userRepository = userRepository;
-		}
+	    public UserHandler(IUserRepository userRepository)
+	    {
+		    this.userRepository = userRepository;
+		   
+	    }
 
 		public async Task<IdResponse> HandleAsync(CreateUserCommand cmd, CancellationToken ct)
 		{
 			//Do some logics, save the result in the persistence and return response indicating the succes state of the 
 
+			switch (cmd._acceslevel)
+			{
+				case 1:
+					// opret medarbejder
+					break;
+				case 2:
+					//opret mellemleder
+					break;
+				case 3:
+					// opret admini
+					break;
+			}
+			
 			if (string.IsNullOrEmpty(cmd.Name))
 			{
 				return  IdResponse.Unsuccessful("cannot create user with an empty name");
@@ -31,21 +46,57 @@ namespace Management.Domain.Handlers
 			}
 			
 			var id = Guid.NewGuid();
-			
-			var result = await userRepository.InsertUser(new User
-			{
-				Id = "testhansi1234",
-				Email = cmd.Email,
-				Name = cmd.Name,
-				Password = BCrypt.Net.BCrypt.HashPassword(cmd.Password)
-			});
 
-			if (!result.IsSuccessful)
+			var result = await userRepository.InsertAsync(new User()
+			{
+				Email = cmd.Email,
+				Id = id,
+				Name = cmd.Name,
+				AccessLevel = cmd._acceslevel,
+				
+			});
+/*
+			if (!)
 			{
 				return new IdResponse(Guid.Empty , false);
 			}
-			
+			*/
 			return new IdResponse(id);
 		}
-	}
+
+	    public async Task<IdResponse> HandleAsync(DeleteUserByIdCommand cmd, CancellationToken ct)
+	    {
+		    if (cmd.Id.Equals(Guid.Empty))
+		    {
+			    return IdResponse.Unsuccessful("Id is empty");
+		    }
+		    
+
+		    var user = await userRepository.GetByIdAsync(cmd.Id);
+
+		    var result = await userRepository.DeleteByTAsync(user);
+		    return IdResponse.Successful(user.Id);
+	    }
+
+	    public async Task<IdResponse> HandleAsync(UpdateUserCommand cmd, CancellationToken ct)
+	    {
+		    if (cmd.Id.Equals(Guid.Empty))
+		    {
+			    return IdResponse.Unsuccessful("User id is empty");
+		    }
+
+		    var user = new User
+		    {
+			    Name = cmd.Name,
+			    Email = cmd.Email,
+			    AccessLevel = cmd.Acceslevel,
+			    Id = cmd.Id
+		    };
+
+		    var result = await userRepository.UpdateAsync(user);
+		    
+		    
+		    return IdResponse.Successful(user.Id);
+	    }
+    }
 }
