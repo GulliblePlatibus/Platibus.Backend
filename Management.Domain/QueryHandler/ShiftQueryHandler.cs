@@ -19,19 +19,20 @@ namespace Management.Domain.QueryHandler
                 ShiftRepository = shiftRepository;
             }
         
-            public Task<IEnumerable<Shift>> HandleAsync(GetAllShifts query, CancellationToken ct)
-            {
-                var result = ShiftRepository.GetAllAsync();
-
-                return result;
-            }
-
-            public Task<Shift> HandleAsync(GetShiftById query, CancellationToken ct)
-            {
-                var result = ShiftRepository.GetByIdAsync(query.Id);
-
-                return result;
-            }
+            
+                public Task<IEnumerable<Shift>> HandleAsync(GetAllShifts query, CancellationToken ct)
+                {
+                    var result = ShiftRepository.GetAllAsync();
+    
+                    return result;
+                }
+    
+                public Task<Shift> HandleAsync(GetShiftById query, CancellationToken ct)
+                {
+                    var result = ShiftRepository.GetByIdAsync(query.Id);
+    
+                    return result;
+                }
         }
     }
     
