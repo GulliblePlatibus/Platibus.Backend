@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
+using Management.API.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,8 @@ namespace Management.API
 		{
 			//Configure ConfigurationFiles
 			services.Configure<ElephantSQLConfiguration>(Configuration.GetSection(nameof(ElephantSQLConfiguration)));
+			services.Configure<IdentityServerConfiguration>(
+				Configuration.GetSection(nameof(IdentityServerConfiguration)));
 			
 			//API doesn't work without this is due to the fact that AddMVC adds both razor and json formatting that enabled the api to receive and transmit data smoothly --> https://offering.solutions/blog/articles/2017/02/07/difference-between-addmvc-addmvcore/
 			services.AddMvc();
