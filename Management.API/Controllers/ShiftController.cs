@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
 using Management.Domain.Commands.ShiftCommands;
+using Management.Domain.Queries;
+using Management.Domain.Queries.Shift;
 using Management.Infrastructure.MessagingContracts;
+using Management.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Management.API.Controllers
@@ -33,5 +37,26 @@ namespace Management.API.Controllers
             return new ObjectResult(response.Id);
         }
         
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetALLShifts()
+        {
+            var result = await QueryRouter.QueryAsync<GetAllShifts, IEnumerable<Shift>>(new GetAllShifts());
+
+            return new ObjectResult(result);
+
+        }
+        
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetShiftById, User>(new GetShiftById(id));
+
+            return new ObjectResult(result);
+        }
     }
+    
+    
+   
 }
