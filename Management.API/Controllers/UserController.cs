@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace Management.API.Controllers
 {
-    [Route("api/user")]
+    [Route("api/users")]
     [ApiController]
     public partial class UserController : BaseController
     {
@@ -25,7 +25,7 @@ namespace Management.API.Controllers
         }
 
         [HttpGet]
-        [Route("getUsers")]
+        [Route("")]
         public async Task<IActionResult> GetALLUsers()
         {
             var result = await QueryRouter.QueryAsync<GetUsers, IEnumerable<User>>(new GetUsers());
