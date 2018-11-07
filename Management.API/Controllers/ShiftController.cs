@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Management.API.Controllers
 {
-    [Route("api/shift")]
+    [Route("api/shifts")]
     [ApiController]
     public class ShiftController : BaseController
     {
