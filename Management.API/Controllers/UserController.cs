@@ -64,6 +64,16 @@ namespace Management.API.Controllers
             return new ObjectResult(result);
         }
         
+        [HttpPost]
+        [Route("{id}/shifts/{shiftId}")]
+        public async Task<IActionResult> AssignToShift([FromBody] AssignShiftRequestModel assignShiftRequestModel)
+        {
+            var result = await CommandRouter.RouteAsync<AssignUserToShiftCommand, IdResponse>(
+                new AssignUserToShiftCommand(assignShiftRequestModel.Id, assignShiftRequestModel.ShiftId));
+            
+            return new ObjectResult(result);
+        }
+        
        
     }
 }

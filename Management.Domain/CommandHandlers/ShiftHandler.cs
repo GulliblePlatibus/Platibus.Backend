@@ -12,7 +12,7 @@ namespace Management.Domain.Handlers
     public class ShiftHandler : 
     ICommandHandler<CreateShiftCommand, IdResponse>
     {
-        public IShiftRepository ShiftRepository { get; set; }
+        private IShiftRepository ShiftRepository { get; }
 
 
         public ShiftHandler(IShiftRepository shiftRepository)
@@ -29,7 +29,7 @@ namespace Management.Domain.Handlers
 
             var id = Guid.NewGuid();
 
-            var result = await ShiftRepository.InsertAsync(new Shift()
+            var result = await ShiftRepository.InsertAsync(new Shift
             {
                 Id = id,
                 ShiftStart = cmd.ShiftStart,

@@ -16,7 +16,8 @@ namespace Management.API.Controllers
     [ApiController]
     public class ShiftController : BaseController
     {
-        public ShiftController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter, queryRouter)
+        public ShiftController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter,
+            queryRouter)
         {
         }
 
@@ -33,10 +34,10 @@ namespace Management.API.Controllers
             {
                 return StatusCode(401, response.Message);
             }
-            
+
             return new ObjectResult(response.Id);
         }
-        
+
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetALLShifts()
@@ -46,7 +47,7 @@ namespace Management.API.Controllers
             return new ObjectResult(result);
 
         }
-        
+
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -55,8 +56,27 @@ namespace Management.API.Controllers
 
             return new ObjectResult(result);
         }
+
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteShiftById(Guid id)
+        {
+            var result =
+                await CommandRouter.RouteAsync<DeleteShiftByIdCommand, IdResponse>(new DeleteShiftByIdCommand(id));
+
+            return new ObjectResult(result);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateShiftById(Guid id, [FromBody] UpdateShiftRequestModel shiftRequestModel)
+        {
+            var result = await CommandRouter.RouteAsync<UpdateShiftCommand, IdResponse>(
+                new UpdateShiftCommand(id, shiftRequestModel.ShiftStart, shiftRequestModel.ShiftEnd));
+
+            return new ObjectResult(result);
+        }
     }
-    
-    
-   
+
 }

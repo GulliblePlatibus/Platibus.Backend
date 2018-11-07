@@ -76,7 +76,7 @@ namespace Management.API
 			// https://github.com/henkmollema/Dommel
 			FluentMapper.Initialize(options =>
 			{
-				
+				options.AddMap(new WorkScheduleMap());
 				options.AddMap(new UserMap());
 				options.AddMap(new ShiftMap());
 				options.ForDommel();
