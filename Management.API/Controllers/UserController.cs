@@ -79,7 +79,7 @@ namespace Management.API.Controllers
         [Route("{id}/shifts")]
         public async Task<IActionResult> GetShiftsForUserWithId(Guid id)
         {
-            var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, Shift>(new GetShiftsForUserWithId(id));
+            var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, IEnumerable<Shift>>(new GetShiftsForUserWithId(id));
             
             return new ObjectResult(result);
         }

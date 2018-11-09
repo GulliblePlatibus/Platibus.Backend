@@ -12,40 +12,36 @@ namespace Management.Persistence.Repositories
 {
     public interface IShiftRepository : IBaseRepository<Shift>
     {
-        Task<IEnumerable<WorkSchedule>> GetForUserWithIdAsync(Guid Id);
+        Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid Id);
     }
     
     
     public class ShiftRepository : BaseRepository<Shift>, IShiftRepository
     {
         
-        private readonly IConnectionString _connectionString;
+        private readonly IConnectionString ConnectionString;
         
         public ShiftRepository(IConnectionString _connectionString) : base(_connectionString)
         {
-            _connectionString = this._connectionString;
+            ConnectionString = _connectionString;
         }
 
-        public async Task<IEnumerable<WorkSchedule>> GetForUserWithIdAsync(Guid id)
+        public async Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid id)
         {
             
-                if (id.Equals(Guid.Empty))
-                {
-                    return null;
-                }
-            
-                using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
+             
+                using (var conn = NpgsqlConnection(ConnectionString.GetConnectionString()))
                 {
                     conn.Open();
                     
-                    var result = await conn.QueryAsync<Shift>("Select * from shifts where Id in --> (Select shiftId from hasShift where employeeId = " + "\'" + id + "\'"); //TODO : <-- Discuss SQL injection attack
+                    var result = conn.QueryAsync<Shift>("Select * from shifts where Id in --> (Select shiftId from hasShift where employeeId =" + id); //TODO : <-- Discuss SQL injection attack
                     
                     if (result == null)
                     {
-                        return null;
+                        return new List<Shift>();
                     }
 
-                    return await conn.GetAllAsync<WorkSchedule>();
+                    return await result;
                 }
             
         }

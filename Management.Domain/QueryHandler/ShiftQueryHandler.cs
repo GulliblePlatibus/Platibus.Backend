@@ -12,7 +12,7 @@ using SimpleSoft.Mediator;
 namespace Management.Domain.QueryHandler
 {
     public class ShiftQueryHandler : 
-            IQueryHandler<GetAllShifts, IEnumerable<Shift>> , IQueryHandler<GetShiftById, Shift>
+            IQueryHandler<GetAllShifts, IEnumerable<Shift>> , IQueryHandler<GetShiftById, Shift> , IQueryHandler<GetShiftsForUserWithId,IEnumerable<Shift>>
         {
             public IShiftRepository ShiftRepository { get; }
 
@@ -22,24 +22,24 @@ namespace Management.Domain.QueryHandler
             }
         
             
-                public Task<IEnumerable<Shift>> HandleAsync(GetAllShifts query, CancellationToken ct)
+                public async Task<IEnumerable<Shift>> HandleAsync(GetAllShifts query, CancellationToken ct)
                 {
                     var result = ShiftRepository.GetAllAsync();
     
-                    return result;
+                    return await result;
                 }
     
-                public Task<Shift> HandleAsync(GetShiftById query, CancellationToken ct)
+                public async Task<Shift> HandleAsync(GetShiftById query, CancellationToken ct)
                 {
                     var result = ShiftRepository.GetByIdAsync(query.Id);
     
-                    return result;
+                    return await result;
                 }
             
                 public async Task<IEnumerable<Shift>> HandleAsync(GetShiftsForUserWithId query, CancellationToken ct)
                 {
                     var result = ShiftRepository.GetForUserWithIdAsync(query.Id);
-    
+
                     return await result;
                 }
         }

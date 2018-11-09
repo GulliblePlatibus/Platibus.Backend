@@ -25,12 +25,12 @@ namespace Management.Domain.QueryHandler
             return result ;
         }
 
-        public Task<User> HandleAsync(GetUserById query, CancellationToken ct)
+        public async Task<User> HandleAsync(GetUserById query, CancellationToken ct)
         {
             
             var result = UserRepository.GetByIdAsync(query.Id);
 
-            return result;
+            return await result;
         }
     }
 }
