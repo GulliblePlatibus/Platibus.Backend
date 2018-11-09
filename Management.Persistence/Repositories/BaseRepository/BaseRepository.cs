@@ -87,6 +87,8 @@ namespace Management.Persistence.Repositories
                 return await conn.GetAllAsync<T>();
             }
         }
+
+        
     //***********************DELETE ***************************
 
         public async Task<bool> DeleteByTAsync(T value)

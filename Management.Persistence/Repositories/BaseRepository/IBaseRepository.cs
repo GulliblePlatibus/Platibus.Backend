@@ -40,14 +40,15 @@ namespace Management.Persistence.Repositories
         /// <returns>The object that matches the id</returns>
         Task<T> GetByIdAsync(Guid id);
 
-        
+
         /// <summary>
         /// Get all objects from at tabel
         /// </summary>
+        /// <param name="queryId"></param>
         /// <returns>A list og objects</returns>
         Task<IEnumerable<T>> GetAllAsync();
 
-
+        
         /// <summary>
         ///
         /// Delete an object from the db 

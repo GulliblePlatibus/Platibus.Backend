@@ -6,6 +6,7 @@ using Management.Documents.Documents;
 using Management.Domain.Commands;
 using Management.Domain.Queries;
 using Management.API.Helpers;
+using Management.Domain.Queries.WorkSchedule;
 using Management.Infrastructure.MessagingContracts;
 using Management.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,15 @@ namespace Management.API.Controllers
         {
             var result = await CommandRouter.RouteAsync<AssignUserToShiftCommand, IdResponse>(
                 new AssignUserToShiftCommand(id, shiftId));
+            
+            return new ObjectResult(result);
+        }
+
+        [HttpGet]
+        [Route("{id}/shifts")]
+        public async Task<IActionResult> GetShiftsForUserWithId(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, Shift>(new GetShiftsForUserWithId(id));
             
             return new ObjectResult(result);
         }
