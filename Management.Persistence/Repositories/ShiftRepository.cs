@@ -30,7 +30,7 @@ namespace Management.Persistence.Repositories
         {
             
              
-                using (var conn = NpgsqlConnection(ConnectionString.GetConnectionString()))
+                using (var conn = new NpgsqlConnection(ConnectionString.GetConnectionString()))
                 {
                     conn.Open();
                     
