@@ -12,6 +12,7 @@ namespace Management.Persistence.Model
             Map(x => x.Id).ToColumn("id").IsKey();
             Map(x => x.ShiftStart).ToColumn("shiftstart");
             Map(x => x.ShiftEnd).ToColumn("shiftend");
+            Map(x => x.EmployeeOnShift).ToColumn("employee");
         }
         
     }
@@ -21,6 +22,7 @@ namespace Management.Persistence.Model
         public Guid Id { get; set; }
         public DateTime ShiftStart { get; set; }
         public DateTime ShiftEnd { get; set; }
+        public Guid EmployeeOnShift { get; set; }
         
 
       

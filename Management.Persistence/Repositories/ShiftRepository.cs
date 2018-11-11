@@ -13,6 +13,7 @@ namespace Management.Persistence.Repositories
     public interface IShiftRepository : IBaseRepository<Shift>
     {
         Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid Id);
+        Task<IdResponse> UpdateEmployeeOnShift(Guid employeeId, Guid ShiftID);
     }
     
     
@@ -44,6 +45,23 @@ namespace Management.Persistence.Repositories
                     return await result;
                 }
             
+        }
+
+        public async Task<IdResponse> UpdateEmployeeOnShift(Guid employeeId , Guid ShiftID)
+        {
+            using (var conn = new NpgsqlConnection(ConnectionString.GetConnectionString()))
+            {
+                conn.Open();
+                    
+                var result = conn.QueryAsync<Shift>("UPDATE shifts SET employee =  WHERE id = @ShiftId"); //TODO : <-- Discuss SQL injection attack
+
+                if (result.IsCompleted)
+                {
+                    return IdResponse.Successful(employeeId);
+                }
+                
+                return IdResponse.Unsuccessful();
+            }
         }
     }
 }
