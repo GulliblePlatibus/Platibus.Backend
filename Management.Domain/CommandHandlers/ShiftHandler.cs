@@ -10,7 +10,7 @@ using SimpleSoft.Mediator;
 namespace Management.Domain.Handlers
 {
     public class ShiftHandler : 
-    ICommandHandler<CreateShiftCommand, IdResponse>
+    ICommandHandler<CreateShiftCommand, IdResponse> , ICommandHandler<AssignUserToShiftCommand , IdResponse> , ICommandHandler<DeleteShiftByIdCommand , IdResponse>
     {
         private IShiftRepository ShiftRepository { get; }
 
@@ -72,6 +72,19 @@ namespace Management.Domain.Handlers
 		    
 		    
             return IdResponse.Successful(Shift.Id);
+        }
+
+        public async Task<IdResponse> HandleAsync(AssignUserToShiftCommand cmd, CancellationToken ct)
+        {
+            
+            var updateShift = await ShiftRepository.GetByIdAsync(cmd.ShiftId);
+            updateShift.ShiftEnd = cmd.EndTime;
+            updateShift.ShiftStart = cmd.StartTime;
+            updateShift.EmployeeOnShift = cmd.EmployeeId;
+
+            var result = await ShiftRepository.UpdateAsync(updateShift);
+            
+            return IdResponse.Successful(updateShift.Id);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Management.Domain.Handlers
                 ShiftId = cmd.ShiftId
             };
 
-            var result = await _workScheduleRepository.InsertAsync(assignedUser);
+            //var result = await _workScheduleRepository.InsertAsync(assignedUser);
 
             var shiftToUpdate = await _shiftRepository.GetByIdAsync(cmd.ShiftId);
             shiftToUpdate.EmployeeOnShift = cmd.Id;
