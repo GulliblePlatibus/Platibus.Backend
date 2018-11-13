@@ -35,9 +35,9 @@ namespace Management.Persistence.Repositories
                 {
                     conn.Open();
                     
-                    var result = conn.QueryAsync<Shift>("Select * from shifts where Id in --> (Select shiftId from hasShift where employeeId =" + id); //TODO : <-- Discuss SQL injection attack
+                    var result = conn.QueryAsync<Shift>("Select * from shifts where Id in (Select shiftId from hasShift where employeeId='"+id + "')"); //TODO : <-- Discuss SQL injection attack
                     
-                    if (result == null)
+                   if (result == null)
                     {
                         return new List<Shift>();
                     }

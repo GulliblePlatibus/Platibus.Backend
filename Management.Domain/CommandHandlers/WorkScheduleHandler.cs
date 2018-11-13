@@ -35,12 +35,12 @@ namespace Management.Domain.Handlers
                 ShiftId = cmd.ShiftId
             };
 
-            //var result = await _workScheduleRepository.InsertAsync(assignedUser);
+            var result = await _workScheduleRepository.InsertAsync(assignedUser);
 
-            var shiftToUpdate = await _shiftRepository.GetByIdAsync(cmd.ShiftId);
+           /* var shiftToUpdate = await _shiftRepository.GetByIdAsync(cmd.ShiftId);
             shiftToUpdate.EmployeeOnShift = cmd.Id;
             var result1 = await _shiftRepository.UpdateAsync(shiftToUpdate);
-            
+*/            
             return new IdResponse(assignedUser.Id);
 
         }
