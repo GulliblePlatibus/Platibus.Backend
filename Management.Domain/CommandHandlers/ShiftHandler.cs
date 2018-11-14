@@ -33,7 +33,8 @@ namespace Management.Domain.Handlers
             {
                 Id = id,
                 ShiftStart = cmd.ShiftStart,
-                ShiftEnd = cmd.ShiftEnd
+                ShiftEnd = cmd.ShiftEnd,
+                Duration = cmd.ShiftEnd.Subtract(cmd.ShiftStart).TotalHours
                
             });
             

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
 using Management.Domain.Commands;
@@ -80,9 +82,13 @@ namespace Management.API.Controllers
         public async Task<IActionResult> GetShiftsForUserWithId(Guid id)
         {
             var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, IEnumerable<Shift>>(new GetShiftsForUserWithId(id));
+
+            
             
             return new ObjectResult(result);
         }
+        
+        
         
        
     }

@@ -14,6 +14,7 @@ namespace Management.Persistence.Repositories
     {
         Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid Id);
         Task<IdResponse> UpdateEmployeeOnShift(Guid employeeId, Guid ShiftID);
+        Task<IEnumerable<Shift>> GetSalaryForUserAsync(Guid id);
     }
     
     
@@ -35,7 +36,7 @@ namespace Management.Persistence.Repositories
                 {
                     conn.Open();
                     
-                    var result = conn.QueryAsync<Shift>("Select * from shifts where Id in (Select shiftId from hasShift where employeeId='"+id + "')"); //TODO : <-- Discuss SQL injection attack
+                   var result = conn.QueryAsync<Shift>("Select * from shifts where Id in (Select shiftId from hasShift where employeeId='"+id + "')"); //TODO : <-- Discuss SQL injection attack
                     
                    if (result == null)
                     {
@@ -62,6 +63,20 @@ namespace Management.Persistence.Repositories
                 
                 return IdResponse.Unsuccessful();
             }
+        }
+
+        public async Task<IEnumerable<Shift>>GetSalaryForUserAsync(Guid id)
+        {
+            using (var conn= new NpgsqlConnection(ConnectionString.GetConnectionString()))
+            {
+                conn.Open();
+                
+                var result = conn.QueryAsync<Shift>("Select SUM (duration) from shifts where Id in (Select shiftId from hasShift where employeeId='"+ id +"');");
+
+                return await result;
+            }
+            
+            
         }
     }
 }

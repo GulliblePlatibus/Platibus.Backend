@@ -13,6 +13,7 @@ namespace Management.Persistence.Model
             Map(x => x.ShiftStart).ToColumn("shiftstart");
             Map(x => x.ShiftEnd).ToColumn("shiftend");
             Map(x => x.EmployeeOnShift).ToColumn("employee");
+            Map(x => x.Duration).ToColumn("duration");
         }
         
     }
@@ -23,6 +24,7 @@ namespace Management.Persistence.Model
         public DateTime ShiftStart { get; set; }
         public DateTime ShiftEnd { get; set; }
         public Guid EmployeeOnShift { get; set; }
+        public double Duration { get; set; }
         
 
       
