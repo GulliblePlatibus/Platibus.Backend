@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Dapper;
-using Dommel;
 using Management.Documents.Documents;
 using Management.Persistence.Model;
 using Npgsql;
@@ -35,8 +35,23 @@ namespace Management.Persistence.Repositories
                 using (var conn = new NpgsqlConnection(ConnectionString.GetConnectionString()))
                 {
                     conn.Open();
+
+
                     
-                   var result = conn.QueryAsync<Shift>("Select * from shifts where Id in (Select shiftId from hasShift where employeeId='"+id + "')"); //TODO : <-- Discuss SQL injection attack
+                    
+                    //var result = conn.QueryAsync<Shift>("Select * from shifts where Id in --> (Select shiftId from hasShift where employeeId = @Id " , new {Id = Guid.NewGuid()}); //TODO : <-- Discuss SQL injection attack
+
+                    //https://stackoverflow.com/questions/13653461/dapper-and-sql-injections/13653484
+                    // https://github.com/StackExchange/Dapper
+                    
+                    var result = conn.QueryAsync<Shift>("Select id from shifts where id = @Id ",
+                        new {Id = Guid.Parse("29bedaff-6a04-4466-bb27-7132f9f4c4ab") , });
+
+                    
+                    
+                    
+                        
+                    
                     
                    if (result == null)
                     {
