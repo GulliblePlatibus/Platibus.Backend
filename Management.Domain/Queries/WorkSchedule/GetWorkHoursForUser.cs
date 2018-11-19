@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Management.Persistence.Model.Budget;
 using SimpleSoft.Mediator;
 
 namespace Management.Domain.Queries
 {
-    public class GetSalaryForUser : Query<IEnumerable<Persistence.Model.Shift>>
+    public class GetWorkHoursForUser : Query<IEnumerable<Salary>>, IQuery<Salary>
     {
         public Guid Id { get; set; }
         
-        public GetSalaryForUser(Guid id)
+        public GetWorkHoursForUser(Guid id)
         {
             Id = id;
         }

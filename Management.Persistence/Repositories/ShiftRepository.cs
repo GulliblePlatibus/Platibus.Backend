@@ -6,6 +6,7 @@ using Dapper;
 using Dommel;
 using Management.Documents.Documents;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 using Npgsql;
 
 namespace Management.Persistence.Repositories
@@ -14,7 +15,7 @@ namespace Management.Persistence.Repositories
     {
         Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid Id);
         Task<IdResponse> UpdateEmployeeOnShift(Guid employeeId, Guid ShiftID);
-        Task<IEnumerable<Shift>> GetSalaryForUserAsync(Guid id);
+        
     }
     
     
@@ -30,8 +31,6 @@ namespace Management.Persistence.Repositories
 
         public async Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid id)
         {
-            
-             
                 using (var conn = new NpgsqlConnection(ConnectionString.GetConnectionString()))
                 {
                     conn.Open();
@@ -65,18 +64,6 @@ namespace Management.Persistence.Repositories
             }
         }
 
-        public async Task<IEnumerable<Shift>>GetSalaryForUserAsync(Guid id)
-        {
-            using (var conn= new NpgsqlConnection(ConnectionString.GetConnectionString()))
-            {
-                conn.Open();
-                
-                var result = conn.QueryAsync<Shift>("Select SUM (duration) from shifts where Id in (Select shiftId from hasShift where employeeId='"+ id +"');");
-
-                return await result;
-            }
-            
-            
-        }
+       
     }
 }

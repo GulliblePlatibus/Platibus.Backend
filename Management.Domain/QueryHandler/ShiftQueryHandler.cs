@@ -6,13 +6,14 @@ using Management.Domain.Queries;
 using Management.Domain.Queries.Shift;
 using Management.Domain.Queries.WorkSchedule;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 using Management.Persistence.Repositories;
 using SimpleSoft.Mediator;
 
 namespace Management.Domain.QueryHandler
 {
     public class ShiftQueryHandler : 
-            IQueryHandler<GetAllShifts, IEnumerable<Shift>> , IQueryHandler<GetShiftById, Shift> , IQueryHandler<GetShiftsForUserWithId,IEnumerable<Shift>> , IQueryHandler<GetSalaryForUser, IEnumerable<Shift>>
+            IQueryHandler<GetAllShifts, IEnumerable<Shift>> , IQueryHandler<GetShiftById, Shift> , IQueryHandler<GetShiftsForUserWithId,IEnumerable<Shift>>
         {
             public IShiftRepository ShiftRepository { get; }
 
@@ -44,12 +45,7 @@ namespace Management.Domain.QueryHandler
                 }
             
             
-            public async Task<IEnumerable<Shift>> HandleAsync(GetSalaryForUser query, CancellationToken ct)
-            {
-                var result = ShiftRepository.GetSalaryForUserAsync(query.Id);
-
-                return await result;
-            }
+            
         }
     }
     
