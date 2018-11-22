@@ -19,6 +19,8 @@ namespace Management.Persistence.Model
     {
         public Guid Id { get; set; }
         public Guid ShiftId { get; set; }
+        
+        public double TotalPay { get; set; }
 
     }
 }

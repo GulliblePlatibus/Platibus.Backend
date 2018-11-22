@@ -53,7 +53,7 @@ namespace Management.Domain.Handlers
 				Id = id,
 				Name = cmd.Name,
 				AccessLevel = cmd._acceslevel,
-				Wage = cmd.Wage
+				BaseWage = cmd.Wage
 			});
 /*
 			if (!)

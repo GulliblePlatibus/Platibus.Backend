@@ -35,29 +35,19 @@ namespace Management.Persistence.Repositories
                 {
                     conn.Open();
 
-
+                    var result = await conn.QueryAsync<Shift>("SELECT * FROM shifts WHERE Id IN (SELECT shiftId FROM hasShift WHERE employeeId = @Id)", new {Id = id}); //TODO : <-- Discuss SQL injection attack
+                   
                     
-                    
-                    //var result = conn.QueryAsync<Shift>("Select * from shifts where Id in --> (Select shiftId from hasShift where employeeId = @Id " , new {Id = Guid.NewGuid()}); //TODO : <-- Discuss SQL injection attack
-
                     //https://stackoverflow.com/questions/13653461/dapper-and-sql-injections/13653484
                     // https://github.com/StackExchange/Dapper
                     
-                    var result = conn.QueryAsync<Shift>("Select id from shifts where id = @Id ",
-                        new {Id = Guid.Parse("29bedaff-6a04-4466-bb27-7132f9f4c4ab") , });
-
-                    
-                    
-                    
-                        
-                    
-                    
+                  
                    if (result == null)
                     {
                         return new List<Shift>();
                     }
 
-                    return await result;
+                    return result;
                 }
             
         }

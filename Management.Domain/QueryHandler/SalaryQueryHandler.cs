@@ -1,24 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Management.Domain.DomainElements.BudgetPlanner;
 using Management.Domain.Queries;
 using Management.Domain.Queries.Shift;
 using Management.Domain.Queries.User;
-using Management.Persistence.Model.Budget;
+using Management.Persistence.Model;
 using Management.Persistence.Repositories;
 using SimpleSoft.Mediator;
+using Salary = Management.Persistence.Model.Budget.Salary;
 
 namespace Management.Domain.QueryHandler
 {
     public class SalaryQueryHandler : IQueryHandler<GetWorkHoursForUser, Salary> , IQueryHandler<GetWageForUserWithId, Salary>, IQueryHandler<GetSalaryForUserWithId, Salary>
     {
-        
-        public ISalaryRepository SalaryRepository { get; }
+        private ISalaryRepository SalaryRepository { get; }
+        private IUserRepository UserRepository { get; }
+        private IShiftRepository _shiftRepository { get; }
 
-        public SalaryQueryHandler(ISalaryRepository salaryRepository)
+        public SalaryQueryHandler(ISalaryRepository salaryRepository, IUserRepository userRepository, IShiftRepository shiftRepository)
         {
             SalaryRepository = salaryRepository;
+            UserRepository = userRepository;
+            _shiftRepository = shiftRepository;
         }
 
         public async Task<Salary> HandleAsync(GetWorkHoursForUser query, CancellationToken ct)
@@ -37,18 +43,28 @@ namespace Management.Domain.QueryHandler
        
         public async Task<Salary> HandleAsync(GetSalaryForUserWithId query, CancellationToken ct)
         {
-            
-            var wage = await SalaryRepository.GetWageForUserWithIdAsync(query.UserId);
-            
-            var hours = await SalaryRepository.GetWorkHoursForUserAsync(query.UserId);
 
-            var result = wage.Wage * hours.Sum;
+            var user = await UserRepository.GetByIdAsync(query.UserId);
             
+            var shifts = _shiftRepository.GetForUserWithIdAsync(query.UserId).Result;
+            
+            var wageSupplements = new WageSupplements(user);
+               
+            var wage = user.BaseWage;
+           
             var salary = new Salary();
-            salary.SalaryForPeriod = result;
-            salary.Sum = hours.Sum;
-            salary.Wage = wage.Wage;
+           foreach (var shift in shifts)
+            {
+                wageSupplements.ResolveSupplement(user);
+                
+                salary.SalaryForPeriod += (float)(wage * shift.Duration) * wageSupplements.ResolveSupplement(user);
+
+                salary.Sum += (float) shift.Duration;
+            }
+
+            salary.Wage = wage;
             salary.Id = query.UserId;
+
             
             return salary;
 
