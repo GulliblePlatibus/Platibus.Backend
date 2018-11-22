@@ -8,7 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 using Dapper;
 using Management.Documents.Documents;
 using Management.Persistence.Helpers;
-using Management.Persistence.Model.Budget;
 using Npgsql;
 
 namespace Management.Persistence.Repositories

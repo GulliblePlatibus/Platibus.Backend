@@ -10,23 +10,22 @@ using Management.Domain.Queries.User;
 using Management.Persistence.Model;
 using Management.Persistence.Repositories;
 using SimpleSoft.Mediator;
-using Salary = Management.Persistence.Model.Budget.Salary;
 
 namespace Management.Domain.QueryHandler
 {
-    public class SalaryQueryHandler : IQueryHandler<GetWorkHoursForUser, Salary> , IQueryHandler<GetWageForUserWithId, Salary>, IQueryHandler<GetSalaryForUserWithId, Salary>
+    public class SalaryQueryHandler : IQueryHandler<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>
     {
-        private ISalaryRepository SalaryRepository { get; }
-        private IUserRepository UserRepository { get; }
+        
+        private IUserRepository _userRepository { get; }
         private IShiftRepository _shiftRepository { get; }
 
-        public SalaryQueryHandler(ISalaryRepository salaryRepository, IUserRepository userRepository, IShiftRepository shiftRepository)
+        public SalaryQueryHandler(IUserRepository userRepository, IShiftRepository shiftRepository)
         {
-            SalaryRepository = salaryRepository;
-            UserRepository = userRepository;
+            
+            _userRepository = userRepository;
             _shiftRepository = shiftRepository;
         }
-
+/*
         public async Task<Salary> HandleAsync(GetWorkHoursForUser query, CancellationToken ct)
         {
 
@@ -39,34 +38,19 @@ namespace Management.Domain.QueryHandler
             return result;
         }
         
-        
+        */
        
-        public async Task<Salary> HandleAsync(GetSalaryForUserWithId query, CancellationToken ct)
+        public async Task<IEnumerable<ShiftPayment>> HandleAsync(GetSalaryForUserWithId query, CancellationToken ct)
         {
 
-            var user = await UserRepository.GetByIdAsync(query.UserId);
+            var user = await _userRepository.GetByIdAsync(query.UserId);
             
-            var shifts = _shiftRepository.GetForUserWithIdAsync(query.UserId).Result;
+            var shifts = await _shiftRepository.GetForUserWithIdAsync(query.UserId);
+
+            var salary = new Salary(user);
             
-            var wageSupplements = new WageSupplements(user);
-               
-            var wage = user.BaseWage;
-           
-            var salary = new Salary();
-           foreach (var shift in shifts)
-            {
-                wageSupplements.ResolveSupplement(user);
-                
-                salary.SalaryForPeriod += (float)(wage * shift.Duration) * wageSupplements.ResolveSupplement(user);
-
-                salary.Sum += (float) shift.Duration;
-            }
-
-            salary.Wage = wage;
-            salary.Id = query.UserId;
-
             
-            return salary;
+            return salary.ResolvePaymentForShifts(shifts);
 
         }
     }

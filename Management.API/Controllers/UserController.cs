@@ -9,13 +9,13 @@ using Management.Documents.Documents;
 using Management.Domain.Commands;
 using Management.Domain.Queries;
 using Management.API.Helpers;
+using Management.Domain.DomainElements.BudgetPlanner;
 using Management.Domain.Queries.Shift;
 using Management.Domain.Queries.User;
 using Management.Domain.Queries.WorkSchedule;
 using Management.Infrastructure.MessagingContracts;
 using Management.Persistence.Helpers;
 using Management.Persistence.Model;
-using Management.Persistence.Model.Budget;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Options;
@@ -98,7 +98,7 @@ namespace Management.API.Controllers
         [Route("wage/{id}")]
         public async Task<IActionResult> GetWageForUserWithIdAsync(Guid id)
         {
-            var result = await QueryRouter.QueryAsync<GetWageForUserWithId, Salary>(new GetWageForUserWithId(id));
+            var result = await QueryRouter.QueryAsync<GetWageForUserWithId, ShiftPayment>(new GetWageForUserWithId(id));
  
             return new ObjectResult(result);
         }
@@ -107,7 +107,7 @@ namespace Management.API.Controllers
         [Route("hours/{id}")]
         public async Task<IActionResult> GetWorkHoursForUserWithIdAsync(Guid id)
         {
-            var shifts = await QueryRouter.QueryAsync<GetWorkHoursForUser, Salary>(new GetWorkHoursForUser(id));
+            var shifts = await QueryRouter.QueryAsync<GetWorkHoursForUser, ShiftPayment>(new GetWorkHoursForUser(id));
  
             return new ObjectResult(shifts);
         }
@@ -117,7 +117,7 @@ namespace Management.API.Controllers
         [Route("salary/{id}")]
         public async Task<IActionResult> GetSalaryForUserWithIdAsync(Guid id)
         {
-            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, Salary>(new GetSalaryForUserWithId(id));
+            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>(new GetSalaryForUserWithId(id));
             
             
             return new ObjectResult(result);

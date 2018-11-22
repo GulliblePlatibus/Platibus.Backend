@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Management.Documents.Documents;
 using Management.Persistence.Model;
-using Management.Persistence.Model.Budget;
+
 using Npgsql;
 
 namespace Management.Persistence.Repositories

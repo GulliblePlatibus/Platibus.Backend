@@ -6,7 +6,6 @@ using Management.Domain.Queries;
 using Management.Domain.Queries.Shift;
 using Management.Domain.Queries.WorkSchedule;
 using Management.Persistence.Model;
-using Management.Persistence.Model.Budget;
 using Management.Persistence.Repositories;
 using SimpleSoft.Mediator;
 

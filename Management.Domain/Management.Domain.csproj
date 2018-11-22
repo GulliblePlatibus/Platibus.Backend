@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="CommandHandlers\" />
-    <Folder Include="DomainElements\BudgetPlanner\ValueObjects" />
     <Folder Include="Registry\" />
     <Folder Include="Documents\" />
   </ItemGroup>

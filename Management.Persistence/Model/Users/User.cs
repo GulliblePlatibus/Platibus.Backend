@@ -26,7 +26,7 @@ namespace Management.Persistence.Model
 		public string Name { get; set; }
 		public string Email { get; set; }
 	    public int AccessLevel { get; set; }
-	    public float BaseWage { get; set; }
+	    public double BaseWage { get; set; }
 	    public DateTime EmploymentDate { get; set; }
 	    
 		
