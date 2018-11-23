@@ -56,6 +56,32 @@ namespace Management.API.Controllers
             return new ObjectResult(result);
         }
 
+        
+        
+        [HttpPost]
+        [Route("{id}/shifts/{shiftId}")]
+        public async Task<IActionResult> AssignToShift(Guid id, Guid shiftId)
+        {
+            var result = await CommandRouter.RouteAsync<AssignUserToShiftCommand, IdResponse>(
+                new AssignUserToShiftCommand(id, shiftId));
+            
+            return new ObjectResult(result);
+        }
+
+        [HttpGet]
+        [Route("{id}/shifts")]
+        public async Task<IActionResult> GetShiftsForUserWithId(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, IEnumerable<Shift>>(new GetShiftsForUserWithId(id));
+            
+            return new ObjectResult(result);
+        }
+        
+       
+        
+        
+        
+        
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateUserById(Guid id , [FromBody]  UpdateUserRequestModel userRequestModel)
@@ -90,26 +116,5 @@ namespace Management.API.Controllers
             
             return new ObjectResult(result);
         }
-        
-        [HttpPost]
-        [Route("{id}/shifts/{shiftId}")]
-        public async Task<IActionResult> AssignToShift(Guid id, Guid shiftId)
-        {
-            var result = await CommandRouter.RouteAsync<AssignUserToShiftCommand, IdResponse>(
-                new AssignUserToShiftCommand(id, shiftId));
-            
-            return new ObjectResult(result);
-        }
-
-        [HttpGet]
-        [Route("{id}/shifts")]
-        public async Task<IActionResult> GetShiftsForUserWithId(Guid id)
-        {
-            var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, IEnumerable<Shift>>(new GetShiftsForUserWithId(id));
-            
-            return new ObjectResult(result);
-        }
-        
-       
     }
 }
