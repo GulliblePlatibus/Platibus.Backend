@@ -8,9 +8,11 @@ namespace Management.Domain.Commands.ShiftCommands
        
         public DateTime ShiftStart { get; }
         public DateTime ShiftEnd { get; }
+        //public float Duration { get; set; }
 
         public CreateShiftCommand(DateTime shiftStart, DateTime shiftEnd)
         {
+            //Duration = duration;
             ShiftStart = shiftStart;
             ShiftEnd = shiftEnd;
         }

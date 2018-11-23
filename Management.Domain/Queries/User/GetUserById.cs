@@ -4,7 +4,7 @@ using SimpleSoft.Mediator;
 
 namespace Management.Domain.Queries
 {
-    public class GetUserById : Query<User>
+    public class GetUserById : Query<Persistence.Model.User>
     {
         public Guid Id { get; set; }
 

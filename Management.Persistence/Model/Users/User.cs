@@ -14,7 +14,9 @@ namespace Management.Persistence.Model
 			Map(x => x.Email).ToColumn("email");
 			Map(x => x.Name).ToColumn("name");
 			Map(x => x.AccessLevel).ToColumn("accesslevel");
-			
+			Map(x => x.BaseWage).ToColumn("wage");
+			Map(x => x.EmploymentDate).ToColumn("employmentDate");
+
 		}
 	}
 	
@@ -24,6 +26,8 @@ namespace Management.Persistence.Model
 		public string Name { get; set; }
 		public string Email { get; set; }
 	    public int AccessLevel { get; set; }
+	    public double BaseWage { get; set; }
+	    public DateTime EmploymentDate { get; set; }
 	    
 		
     }

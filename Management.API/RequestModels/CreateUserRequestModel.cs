@@ -7,5 +7,6 @@ namespace Management.API.RequestModels
         public string Email { get; set; }
         public string Password { get; set; }
         public int Acceslevel { get; set; }
+        public float Wage { get; set; }
     }
 }

@@ -1,16 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Linq;
+using System.Threading.Channels;
 using System.Threading.Tasks;
+using Dapper;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
 using Management.Domain.Commands;
 using Management.Domain.Queries;
 using Management.API.Helpers;
+using Management.Domain.DomainElements.BudgetPlanner;
+using Management.Domain.Queries.Shift;
+using Management.Domain.Queries.User;
 using Management.Domain.Queries.WorkSchedule;
 using Management.Infrastructure.MessagingContracts;
+using Management.Persistence.Helpers;
 using Management.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -70,9 +78,40 @@ namespace Management.API.Controllers
 
         [HttpGet]
         [Route("{id}/shifts")]
-        public async Task<IActionResult> GetShiftsForUserWithId(Guid id)
+        public async Task<IActionResult> GetShiftsForUserWithIdAsync(Guid id)
         {
             var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, IEnumerable<Shift>>(new GetShiftsForUserWithId(id));
+
+            
+            
+            return new ObjectResult(result);
+        }
+
+        [HttpGet]
+        [Route("wage/{id}")]
+        public async Task<IActionResult> GetWageForUserWithIdAsync(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetWageForUserWithId, ShiftPayment>(new GetWageForUserWithId(id));
+ 
+            return new ObjectResult(result);
+        }
+        
+        [HttpGet]
+        [Route("hours/{id}")]
+        public async Task<IActionResult> GetWorkHoursForUserWithIdAsync(Guid id)
+        {
+            var shifts = await QueryRouter.QueryAsync<GetWorkHoursForUser, ShiftPayment>(new GetWorkHoursForUser(id));
+ 
+            return new ObjectResult(shifts);
+        }
+
+        
+        [HttpGet]
+        [Route("salary/{id}")]
+        public async Task<IActionResult> GetSalaryForUserWithIdAsync(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>(new GetSalaryForUserWithId(id));
+            
             
             return new ObjectResult(result);
         }

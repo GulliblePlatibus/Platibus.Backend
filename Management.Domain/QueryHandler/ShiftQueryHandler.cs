@@ -39,9 +39,12 @@ namespace Management.Domain.QueryHandler
                 public async Task<IEnumerable<Shift>> HandleAsync(GetShiftsForUserWithId query, CancellationToken ct)
                 {
                     var result = ShiftRepository.GetForUserWithIdAsync(query.Id);
-
+                    
                     return await result;
                 }
+            
+            
+            
         }
     }
     
