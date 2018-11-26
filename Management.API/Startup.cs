@@ -18,6 +18,7 @@ using StructureMap;
 using Management.API.Registry;
 using Management.Persistence.Helpers;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 
 namespace Management.API
 {
@@ -76,6 +77,7 @@ namespace Management.API
 			// https://github.com/henkmollema/Dommel
 			FluentMapper.Initialize(options =>
 			{
+				options.AddMap(new SupplementInfoMap());
 				options.AddMap(new WorkScheduleMap());
 				options.AddMap(new UserMap());
 				options.AddMap(new ShiftMap());

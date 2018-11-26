@@ -125,7 +125,7 @@ namespace Management.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateUserById(Guid id , [FromBody]  UpdateUserRequestModel userRequestModel)
         {
-            //Calls update controller on Identity API, so the db is synced
+            //*****************Calls update controller on Identity API, so the db is synced***************************
             var identityBaseurl = _identityConfig.Value.IdentityServerUrl + "/identity/users/" + id;
             var httpClient = new HttpClient();
             
@@ -136,7 +136,9 @@ namespace Management.API.Controllers
             {
                 Email = userRequestModel.Email,
                 Password = userRequestModel.Password,
-                AuthLevel = userRequestModel.Accesslevel
+                AuthLevel = userRequestModel.Accesslevel,
+                
+                
             }, Formatting.Indented);
             
             var httpContent = new StringContent(jsonUpdateStatement, System.Text.Encoding.UTF8, "application/json");
@@ -147,8 +149,25 @@ namespace Management.API.Controllers
             {
                 return StatusCode(400, "Identity server could not be reached.");
             }
+
+            //*********************Update API db (seperate from identity db)************************
+            //Gets user from database to handle null and empty variables in the request model
+            var user = await QueryRouter.QueryAsync<GetUserById, User>(new GetUserById(id));
+
+            //if the variables are empty or null, (or 0 for access level), they wont be updated
+            if (user != null)
+            {
+                if (string.IsNullOrWhiteSpace(userRequestModel.Name) && !string.IsNullOrWhiteSpace(user.Name))
+                    userRequestModel.Name = user.Name;
+                if (string.IsNullOrWhiteSpace(userRequestModel.Email) && !string.IsNullOrWhiteSpace(user.Email))
+                    userRequestModel.Email = user.Email;
+                if (userRequestModel.Accesslevel == 0)
+                    userRequestModel.Accesslevel = user.AccessLevel;
+                if (userRequestModel.Wage != user.BaseWage)
+                    userRequestModel.Wage = user.BaseWage;
+            }
+
             
-            //Update API db (seperate from identity db)
             var result = await CommandRouter.RouteAsync<UpdateUserCommand, IdResponse>(
                 new UpdateUserCommand(userRequestModel.Name, userRequestModel.Email, userRequestModel.Password,
                     userRequestModel.Accesslevel , id));
