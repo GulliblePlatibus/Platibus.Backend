@@ -9,9 +9,10 @@ namespace Management.Domain.Commands
 	    public string Name { get; }
 		public string Email { get; }
 		public string Password { get; }
-	    public float Wage { get; }
+	    public double Wage { get; }
+	    public DateTime EmploymentDate { get; }
 
-		public CreateUserCommand(Guid id, string name, string email, string password, int acceslevel, float wage)
+		public CreateUserCommand(Guid id, string name, string email, string password, int acceslevel, double wage, DateTime employmentDate )
 		{
 			if (id.Equals(Guid.Empty))
 			{
@@ -24,6 +25,8 @@ namespace Management.Domain.Commands
 			Email = email;
 			Password = password;
 			Wage = wage;
+			EmploymentDate = employmentDate;
+
 
 		}
     }

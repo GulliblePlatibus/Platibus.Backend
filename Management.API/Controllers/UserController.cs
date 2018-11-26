@@ -136,7 +136,9 @@ namespace Management.API.Controllers
             {
                 Email = userRequestModel.Email,
                 Password = userRequestModel.Password,
-                AuthLevel = userRequestModel.Accesslevel
+                AuthLevel = userRequestModel.Accesslevel,
+                
+                
             }, Formatting.Indented);
             
             var httpContent = new StringContent(jsonUpdateStatement, System.Text.Encoding.UTF8, "application/json");
@@ -161,6 +163,8 @@ namespace Management.API.Controllers
                     userRequestModel.Email = user.Email;
                 if (userRequestModel.Accesslevel == 0)
                     userRequestModel.Accesslevel = user.AccessLevel;
+                if (userRequestModel.Wage != user.BaseWage)
+                    userRequestModel.Wage = user.BaseWage;
             }
 
             
