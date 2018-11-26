@@ -4,27 +4,19 @@ using Management.Persistence.Model;
 
 namespace Management.Domain.DomainElements.BudgetPlanner.ValueObjects
 {
-    public class SortetWorkHours
+    public class SortedWorkHours
     {
-        public class SortedWorkHours
-        {
-            public double NormalTime { get; private set; }
-            public double NightHours { get; private set; }
+        public double Hours { get; }
+        public double NightHours { get; }
+        public double WeekendHours { get; }
+        public double NightWeekendHours { get; }
 
-            public SortedWorkHours(int[] workhours)
-            {
-                foreach (var workHour in workhours)
-                {
-                    if (workHour > 6 && workHour < 18)
-                    {
-                        NormalTime++;
-                    }
-                    else
-                    {
-                        NightHours++;
-                    }
-                }
-            }
+        public SortedWorkHours(double hours, double nightHours, double weekendHours, double nightWeekendHours)
+        {
+            Hours = hours;
+            NightHours = nightHours;
+            WeekendHours = weekendHours;
+            NightWeekendHours = nightWeekendHours;
         }
     }
 }

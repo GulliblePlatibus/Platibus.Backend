@@ -9,44 +9,24 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 {
     public class Salary
     {
+        private readonly ISalaryConfiguration _salaryConfig;
+        
         public double BaseWage { get; private set; }
-        public double Seniority { get; private set; }
-        public double Night { get; private set; }
-        public double Weekend { get; private set; }
-        public double OddHours { get; set; }
-        //  public float OverTime{ get; }
-        public double Position { get; private set; }
-        public double PaymentForShift { get; set; }
-        public double TotalPaymentForShifts { get; set; }
-
+        public SortedSupplements SortedSupplements { get; private set; }
         
-        
-        public Salary(User user)
+        public Salary(User user, ISalaryConfiguration salaryConfig)
         {
+            _salaryConfig = salaryConfig;
             BaseWage = user.BaseWage;
-            Seniority = ResolveSeniority(user);
-          //  OddHours = ResolveWorkHours();
-
-            
-          
-
         }
         
         public ShiftPayment ResolvePaymentsForShift(Shift shift)
         {
-            var workHours = shift.Duration;
+            var resolvedWorkHours = ResolveWorkHours(shift);
             
-            var shiftPayment = new ShiftPayment();
- 
-            shiftPayment.TotalPayment =
-                workHours * (BaseWage * ((BaseWage / 100) + Seniority + ResolveWorkHours(shift) + Position));
-
-
-            shiftPayment.ShiftId = shift.Id;
-            
+            var shiftPayment = new ShiftPayment(Guid.Empty, Guid.Empty, resolvedWorkHours, SortedSupplements);
             
             return shiftPayment;
-            
         }
 
         public List<ShiftPayment> ResolvePaymentForShifts(IEnumerable<Shift> shifts)
@@ -56,21 +36,15 @@ namespace Management.Domain.DomainElements.BudgetPlanner
             foreach (var VARIABLE in shifts)
             {
                 TotalShiftPayment.Add(ResolvePaymentsForShift(VARIABLE));
-                
-                
             }
 
             return TotalShiftPayment;
         }
         
-      
-        
-        
         private double ResolveSeniority(User user)
         {
-           
             var currentTicks = DateTime.Today;
-            var ticksInYear = (DateTime.Today.AddYears(1)).Subtract(currentTicks).Ticks;
+            var ticksInYear = DateTime.Today.AddYears(1).Subtract(currentTicks).Ticks;
 
             var ticksAtEmployment = user.EmploymentDate.Date.Ticks;
 
@@ -78,80 +52,198 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
             var seniority = ticksSince / ticksInYear;
 
-            var senioritySupplement = (seniority);
+            var senioritySupplement = seniority;
 
             return senioritySupplement;
-
         }
         
-        private double ResolveWorkHours(Shift shift)
+        private SortedWorkHours ResolveWorkHours(Shift shift)
         {
-           
             var startDate = shift.ShiftStart;
+
+            var currentHour = new DateTime(startDate.Ticks).AddMinutes(_salaryConfig.TimeTrackingIntervalInMinutes);
+
             var endDate = shift.ShiftEnd;
 
-            var startDay = startDate.DayOfWeek;
-            var endDay = endDate.DayOfWeek;
+            var hourList = new List<DateTime>();
 
-            var startHour = startDate.Hour;
-            var endHour = endDate.Hour;
-
-            var hourList = new List<int>();
-        
-            while (startHour != endHour)
+            while(DateTime.Compare(currentHour, endDate) <= 0)
             {
-                if (startHour == 24)
-                {
-                    startHour = 0;
-                }
-            
-                hourList.Add(startHour);
-                
-                startHour++;
+                var hour = new DateTime(currentHour.Ticks);
+
+                hourList.Add(hour);
+
+                currentHour = new DateTime(hour.Ticks).AddMinutes(_salaryConfig.TimeTrackingIntervalInMinutes);
             }
-        
-        var sortedWorkHours = new SortetWorkHours();
-        
-            var oddHourSupplement = 0.0;
-            
-            var nightHours = 0;
-            
-            var weekendHours = 0;
 
-            var normalHours =  0;
+            return ResolvePaymentForHours(hourList);
+        }
+        
+        private SortedWorkHours ResolvePaymentForHours(List<DateTime> workHours)
+        {
+            double hours = 0; // 40 * 100
+            double nightHours = 0; // 3 * 25
+            double weekendHours = 0; // 12 * 30
+            double nightWeekendHours = 0; //25 * 50
+
+            Dictionary<SupplementInfo, double> ;
             
-            
-            
-            foreach (var VARIABLE in hourList)
+            foreach(var quarterHour in workHours)
             {
+                hours += _salaryConfig.TimeTrackingInHours;
 
-                if (VARIABLE >= 18 || VARIABLE <= 6)
+                var dayWeek = quarterHour.DayOfWeek;
+
+                //Determine if the day is a weekend day
+                if(dayWeek.Equals(DayOfWeek.Saturday) || dayWeek.Equals(DayOfWeek.Sunday))
                 {
-                    
-                    nightHours++;
-               
-                    
-                }
+                    //Determine if the day just began in that case the last timeschedule is respective to the past day
+                    if (quarterHour.DayBegan(DayOfWeek.Saturday))
+                    {
+                        nightHours += _salaryConfig.TimeTrackingInHours;
+                        continue;
+                    }
 
-                else if (startDay == DayOfWeek.Saturday || startDay == DayOfWeek.Sunday && endDay == DayOfWeek.Saturday ||
-                    endDay == DayOfWeek.Sunday)
-                {
-                    weekendHours++;
-
+                    if (quarterHour.Hour >= _salaryConfig.WeekendNightBegin)
+                    {
+                        if (quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.WeekendNightBegin)
+                        {
+                            continue;
+                        }
+                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                    }
+                    else if (quarterHour.Hour <= _salaryConfig.WeekendNightEnd)
+                    {
+                        if(quarterHour.Hour == _salaryConfig.WeekendNightEnd)
+                        {
+                            if (quarterHour.Minute == 0)
+                            {
+                                nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                            }
+                            else
+                            {
+                                weekendHours += _salaryConfig.TimeTrackingInHours;
+                            }
+                        }
+                        else
+                        {
+                            nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                        }
+                    }
+                    else
+                    {
+                        weekendHours += _salaryConfig.TimeTrackingInHours;
+                    }
                 }
                 else
                 {
-                    normalHours++;
+                    if(quarterHour.DayBegan(DayOfWeek.Monday))
+                    {
+                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                        continue;
+                    }
+
+                    if(quarterHour.Hour >= _salaryConfig.NightHourBegin)
+                    {
+                        if(quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.NightHourBegin)
+                        {
+                            continue;
+                        }
+                        nightHours += _salaryConfig.TimeTrackingInHours;
+                    }
+                    else if (quarterHour.Hour <= _salaryConfig.NightHourEnd)
+                    {
+                        if(quarterHour.Minute == 0)
+                        {
+                            nightHours += _salaryConfig.TimeTrackingInHours;
+                        }
+                    }
                 }
             }
 
-            oddHourSupplement = ((nightHours * 1.20) + (weekendHours * 1.40));
-            
-
-            return oddHourSupplement;
-
+            return new SortedWorkHours(hours, nightHours, weekendHours, nightWeekendHours);
         }
+        
+        private SortedWorkHours ResolvePaymentForHours(List<DateTime> workHours, int i)
+        {
+            double hours = 0; // 40 * 100
 
+            var supplementHours = new Dictionary<SupplementInfo, double>();
+            
+            foreach(var quarterHour in workHours)
+            {
+                hours += _salaryConfig.TimeTrackingInHours;
+
+                var dayWeek = quarterHour.DayOfWeek;
+
+                //Determine if the day is a weekend day
+                if(dayWeek.Equals(DayOfWeek.Saturday) || dayWeek.Equals(DayOfWeek.Sunday))
+                {
+                    //Determine if the day just began in that case the last timeschedule is respective to the past day
+                    if (quarterHour.DayBegan(DayOfWeek.Saturday))
+                    {
+                        nightHours += _salaryConfig.TimeTrackingInHours;
+                        continue;
+                    }
+
+                    if (quarterHour.Hour >= _salaryConfig.WeekendNightBegin)
+                    {
+                        if (quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.WeekendNightBegin)
+                        {
+                            continue;
+                        }
+                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                    }
+                    else if (quarterHour.Hour <= _salaryConfig.WeekendNightEnd)
+                    {
+                        if(quarterHour.Hour == _salaryConfig.WeekendNightEnd)
+                        {
+                            if (quarterHour.Minute == 0)
+                            {
+                                nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                            }
+                            else
+                            {
+                                weekendHours += _salaryConfig.TimeTrackingInHours;
+                            }
+                        }
+                        else
+                        {
+                            nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                        }
+                    }
+                    else
+                    {
+                        weekendHours += _salaryConfig.TimeTrackingInHours;
+                    }
+                }
+                else
+                {
+                    if(quarterHour.DayBegan(DayOfWeek.Monday))
+                    {
+                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
+                        continue;
+                    }
+
+                    if(quarterHour.Hour >= _salaryConfig.NightHourBegin)
+                    {
+                        if(quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.NightHourBegin)
+                        {
+                            continue;
+                        }
+                        nightHours += _salaryConfig.TimeTrackingInHours;
+                    }
+                    else if (quarterHour.Hour <= _salaryConfig.NightHourEnd)
+                    {
+                        if(quarterHour.Minute == 0)
+                        {
+                            nightHours += _salaryConfig.TimeTrackingInHours;
+                        }
+                    }
+                }
+            }
+
+            return new SortedWorkHours(hours, nightHours, weekendHours, nightWeekendHours);
+        }
     }
-    
 }
