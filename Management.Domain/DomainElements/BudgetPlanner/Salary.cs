@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Management.Domain.DomainElements.BudgetPlanner.ValueObjects;
 using Management.Domain.QueryHandler;
 using Management.Persistence.Model;
@@ -18,6 +19,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         {
             _salaryConfig = salaryConfig;
             BaseWage = user.BaseWage;
+            salaryConfig.Supplements.First().DayOfSupplement.ConvertToString();
         }
         
         public ShiftPayment ResolvePaymentsForShift(Shift shift)

@@ -75,6 +75,7 @@ namespace Management.Domain.QueryHandler
                         new List<HourInfo>{new HourInfo(0, 6)}));
             }));
             
+            
             var shiftPayments = salary.ResolvePaymentForShifts(shifts);
             
             return shiftPayments;
