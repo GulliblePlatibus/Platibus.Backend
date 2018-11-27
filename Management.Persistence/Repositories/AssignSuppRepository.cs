@@ -8,7 +8,7 @@ namespace Management.Persistence.Repositories
         
     }
     
-    public class AssignSuppRepository : BaseRepository<AssignedSupplements>
+    public class AssignSuppRepository : BaseRepository<AssignedSupplements>, IAssignSuppRepository
     {
         public AssignSuppRepository(IConnectionString connectionString) : base(connectionString)
         {
