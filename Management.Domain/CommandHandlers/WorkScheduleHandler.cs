@@ -11,14 +11,10 @@ namespace Management.Domain.Handlers
 {
     public class WorkScheduleHandler : ICommandHandler<AssignUserToShiftCommand , IdResponse>
     {
-        private readonly IShiftRepository _shiftRepository;
-        
-
         private readonly IWorkScheduleRepository _workScheduleRepository;
 
         public WorkScheduleHandler(IWorkScheduleRepository workScheduleRepository , IShiftRepository shiftRepository)
         {
-            _shiftRepository = shiftRepository;
             _workScheduleRepository = workScheduleRepository;
         }
         
@@ -32,7 +28,9 @@ namespace Management.Domain.Handlers
             var assignedUser = new WorkSchedule
             {
                 Id = cmd.Id,
-                ShiftId = cmd.ShiftId
+                ShiftId = cmd.ShiftId,
+                
+                
             };
 
             var result = await _workScheduleRepository.InsertAsync(assignedUser);

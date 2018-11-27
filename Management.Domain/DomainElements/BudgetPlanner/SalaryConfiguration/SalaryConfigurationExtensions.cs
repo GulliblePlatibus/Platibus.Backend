@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Text;
+using System.Text.RegularExpressions;
 using Management.Domain.DomainElements.BudgetPlanner.ValueObjects;
 
 namespace Management.Domain.DomainElements.BudgetPlanner
@@ -70,5 +72,72 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
             return week[index];
         }
+        public static string ConvertToString(this List<DayOfWeek> dayOfWeek)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var day in dayOfWeek)
+            {
+                builder.Append(day.ToString());
+                builder.Append(":");
+            }
+
+            builder.Remove(builder.Length - 1, 1);
+
+            return builder.ToString();
+        }
+
+        public static List<DayOfWeek> ConvertToList(this string dayWeekString)
+        {
+            var splitted = dayWeekString.Split(':');
+
+            var days = new List<DayOfWeek>();
+
+            foreach (var VARIABLE in splitted)
+            {
+                
+                var dayOfWeek =(DayOfWeek)Enum.Parse(typeof(DayOfWeek), VARIABLE);
+                
+                days.Add(dayOfWeek);
+            }
+
+            return days;
+        }
+        
+        
+        public static string ConvertToString(this List<HourInfo> hourInfos)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var hour in hourInfos)
+            {
+                builder.Append("$");
+                builder.Append(hour.FromHour);
+                builder.Append(":");
+                builder.Append(hour.ToHour);
+
+            }
+
+            return builder.ToString();
+        }
+        
+        public static List<HourInfo> ConvertHourToList(this string hourInfoString)
+        {
+            var splitted = hourInfoString.Split('$',':');
+            
+
+            var hours = new List<HourInfo>();
+
+            foreach (var VARIABLE in splitted)
+            {
+                
+                var hourInfo =(VARIABLE, VARIABLE);
+                
+                hours.Add(new HourInfo(int.Parse(hourInfo.Item1), int.Parse(hourInfo.Item2)));
+            }
+
+            return hours;
+        }
+
     }
 }

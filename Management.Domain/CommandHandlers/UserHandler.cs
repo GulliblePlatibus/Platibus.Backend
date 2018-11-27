@@ -7,11 +7,13 @@ using EmailValidation;
 using Management.Documents.Documents;
 using Management.Persistence.Repositories;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 
 namespace Management.Domain.Handlers
 {
 	public class UserHandler : 
-	ICommandHandler<CreateUserCommand, IdResponse> , ICommandHandler<DeleteUserByIdCommand , IdResponse> , ICommandHandler<UpdateUserCommand , IdResponse>
+	ICommandHandler<CreateUserCommand, IdResponse>, ICommandHandler<DeleteUserByIdCommand, IdResponse>,
+		ICommandHandler<UpdateUserCommand, IdResponse>
     {
 		private readonly IUserRepository _userRepository;
 	   
@@ -100,5 +102,7 @@ namespace Management.Domain.Handlers
 		    
 		    return IdResponse.Successful(user.Id);
 	    }
+	    
+	    
     }
 }
