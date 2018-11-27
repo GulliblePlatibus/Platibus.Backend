@@ -51,14 +51,13 @@ namespace Management.Domain.QueryHandler
                 Duration = 100,
                 EmployeeOnShift = Guid.Empty,
                 Id = Guid.Empty,
-                ShiftStart = DateTime.Today.AddHours(8),
-                ShiftEnd = DateTime.Today.AddHours(16)
+                ShiftStart = DateTime.Today.AddHours(0),
+                ShiftEnd = DateTime.Today.AddHours(24)
             }};//await _shiftRepository.GetForUserWithIdAsync(query.UserId);
 
             var salary = new Salary(user, SalaryConfigurationBuilder.Build(cfg =>
             {
                 cfg.UseQuarterTimeScheduling();
-                cfg.ConfigureCustomSupplementHours(15, 3, 18, 6);
                 cfg.AddSupplement(
                     new SupplementInfo(
                         "Night Hour",

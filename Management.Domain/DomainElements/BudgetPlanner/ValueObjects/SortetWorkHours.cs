@@ -7,16 +7,12 @@ namespace Management.Domain.DomainElements.BudgetPlanner.ValueObjects
     public class SortedWorkHours
     {
         public double Hours { get; }
-        public double NightHours { get; }
-        public double WeekendHours { get; }
-        public double NightWeekendHours { get; }
+        public Dictionary<SupplementInfo, double> SupplementHours { get; }
 
-        public SortedWorkHours(double hours, double nightHours, double weekendHours, double nightWeekendHours)
+        public SortedWorkHours(double hours, Dictionary<SupplementInfo, double> supplementHours)
         {
             Hours = hours;
-            NightHours = nightHours;
-            WeekendHours = weekendHours;
-            NightWeekendHours = nightWeekendHours;
+            SupplementHours = supplementHours;
         }
     }
 }

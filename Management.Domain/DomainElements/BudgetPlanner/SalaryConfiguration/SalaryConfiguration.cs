@@ -9,10 +9,6 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         int TimeTrackingIntervalInMinutes { get; }
         double TimeTrackingInHours { get; }
         List<SupplementInfo> Supplements { get; }
-        int NightHourBegin { get; }
-        int NightHourEnd { get; }
-        int WeekendNightBegin { get; }
-        int WeekendNightEnd { get; }
         
     }
     
@@ -22,10 +18,6 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         
         public double TimeTrackingInHours { get; private set; }
         public List<SupplementInfo> Supplements { get; } = new List<SupplementInfo>();
-        public int NightHourBegin { get; set; }
-        public int NightHourEnd { get; set; }
-        public int WeekendNightBegin { get; set; }
-        public int WeekendNightEnd { get; set; }
 
         public void AddSupplement(SupplementInfo supplement)
         {
@@ -78,6 +70,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
             Name = name;
             Description = description;
             DayOfSupplement = dayOfSupplement;
+            Supplement = supplement;
             TimeRanges = timeRanges;
         }
     }

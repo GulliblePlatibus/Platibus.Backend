@@ -43,25 +43,32 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         }
 
         public static void ConfigureDefaultSupplementSettings(this SalaryConfiguration salaryConfiguration)
-        {
-            salaryConfiguration.NightHourBegin = 18;
-            salaryConfiguration.NightHourEnd = 6;
-            
-            salaryConfiguration.WeekendNightBegin = 18;
-            salaryConfiguration.WeekendNightEnd = 6;
+        { 
         }
 
         public static void ConfigureCustomSupplementHours(this SalaryConfiguration salaryConfiguration,
             int nightHourBegin, int nightHourEnd, int weekendNightBegin, int weekendNightEnd)
         {
-            salaryConfiguration.NightHourBegin = nightHourBegin;
-            salaryConfiguration.NightHourEnd = nightHourEnd;
-
-            salaryConfiguration.WeekendNightBegin = weekendNightBegin;
-            salaryConfiguration.WeekendNightEnd = weekendNightEnd;
-
         }
 
-        
+        public static DayOfWeek PastDay(this DayOfWeek dayOfWeek)
+        {
+            var week = new List<DayOfWeek>
+            {
+                DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday,
+                DayOfWeek.Saturday, DayOfWeek.Sunday
+            };
+
+            var index = week.IndexOf(dayOfWeek);
+
+            var previousIndex = index - 1;
+
+            if (previousIndex < 0)
+            {
+                index = week.Count - 1;
+            }
+
+            return week[index];
+        }
     }
 }

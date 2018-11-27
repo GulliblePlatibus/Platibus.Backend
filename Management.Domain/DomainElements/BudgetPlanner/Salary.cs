@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Management.Domain.DomainElements.BudgetPlanner.ValueObjects;
 using Management.Domain.QueryHandler;
 using Management.Persistence.Model;
@@ -11,20 +13,20 @@ namespace Management.Domain.DomainElements.BudgetPlanner
     {
         private readonly ISalaryConfiguration _salaryConfig;
         
-        public double BaseWage { get; private set; }
+        public User User { get; private set; }
         public SortedSupplements SortedSupplements { get; private set; }
         
         public Salary(User user, ISalaryConfiguration salaryConfig)
         {
             _salaryConfig = salaryConfig;
-            BaseWage = user.BaseWage;
+            User = user;
         }
         
         public ShiftPayment ResolvePaymentsForShift(Shift shift)
         {
             var resolvedWorkHours = ResolveWorkHours(shift);
             
-            var shiftPayment = new ShiftPayment(Guid.Empty, Guid.Empty, resolvedWorkHours, SortedSupplements);
+            var shiftPayment = new ShiftPayment(User.Id, shift.Id, resolvedWorkHours);
             
             return shiftPayment;
         }
@@ -79,95 +81,11 @@ namespace Management.Domain.DomainElements.BudgetPlanner
             return ResolvePaymentForHours(hourList);
         }
         
+        
+        
         private SortedWorkHours ResolvePaymentForHours(List<DateTime> workHours)
         {
-            double hours = 0; // 40 * 100
-            double nightHours = 0; // 3 * 25
-            double weekendHours = 0; // 12 * 30
-            double nightWeekendHours = 0; //25 * 50
-
-            Dictionary<SupplementInfo, double> ;
-            
-            foreach(var quarterHour in workHours)
-            {
-                hours += _salaryConfig.TimeTrackingInHours;
-
-                var dayWeek = quarterHour.DayOfWeek;
-
-                //Determine if the day is a weekend day
-                if(dayWeek.Equals(DayOfWeek.Saturday) || dayWeek.Equals(DayOfWeek.Sunday))
-                {
-                    //Determine if the day just began in that case the last timeschedule is respective to the past day
-                    if (quarterHour.DayBegan(DayOfWeek.Saturday))
-                    {
-                        nightHours += _salaryConfig.TimeTrackingInHours;
-                        continue;
-                    }
-
-                    if (quarterHour.Hour >= _salaryConfig.WeekendNightBegin)
-                    {
-                        if (quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.WeekendNightBegin)
-                        {
-                            continue;
-                        }
-                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                    }
-                    else if (quarterHour.Hour <= _salaryConfig.WeekendNightEnd)
-                    {
-                        if(quarterHour.Hour == _salaryConfig.WeekendNightEnd)
-                        {
-                            if (quarterHour.Minute == 0)
-                            {
-                                nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                            }
-                            else
-                            {
-                                weekendHours += _salaryConfig.TimeTrackingInHours;
-                            }
-                        }
-                        else
-                        {
-                            nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                        }
-                    }
-                    else
-                    {
-                        weekendHours += _salaryConfig.TimeTrackingInHours;
-                    }
-                }
-                else
-                {
-                    if(quarterHour.DayBegan(DayOfWeek.Monday))
-                    {
-                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                        continue;
-                    }
-
-                    if(quarterHour.Hour >= _salaryConfig.NightHourBegin)
-                    {
-                        if(quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.NightHourBegin)
-                        {
-                            continue;
-                        }
-                        nightHours += _salaryConfig.TimeTrackingInHours;
-                    }
-                    else if (quarterHour.Hour <= _salaryConfig.NightHourEnd)
-                    {
-                        if(quarterHour.Minute == 0)
-                        {
-                            nightHours += _salaryConfig.TimeTrackingInHours;
-                        }
-                    }
-                }
-            }
-
-            return new SortedWorkHours(hours, nightHours, weekendHours, nightWeekendHours);
-        }
-        
-        private SortedWorkHours ResolvePaymentForHours(List<DateTime> workHours, int i)
-        {
-            double hours = 0; // 40 * 100
-
+            double hours = 0;
             var supplementHours = new Dictionary<SupplementInfo, double>();
             
             foreach(var quarterHour in workHours)
@@ -175,75 +93,96 @@ namespace Management.Domain.DomainElements.BudgetPlanner
                 hours += _salaryConfig.TimeTrackingInHours;
 
                 var dayWeek = quarterHour.DayOfWeek;
-
-                //Determine if the day is a weekend day
-                if(dayWeek.Equals(DayOfWeek.Saturday) || dayWeek.Equals(DayOfWeek.Sunday))
+                var timeScheduling = new DateTime(quarterHour.Ticks);
+                
+                //Check if date is dateBegan
+                if (quarterHour.DayBegan())
                 {
-                    //Determine if the day just began in that case the last timeschedule is respective to the past day
-                    if (quarterHour.DayBegan(DayOfWeek.Saturday))
-                    {
-                        nightHours += _salaryConfig.TimeTrackingInHours;
-                        continue;
-                    }
+                    //Since day is dayBegan we should consider the day as the past day
+                    dayWeek = dayWeek.PastDay();
+                    
+                    //This also means that we should set time schedule to 23:59 instead of 00:00 in order to get the correct date in the following section
+                    timeScheduling.SubstractMinute(1);
+                }
 
-                    if (quarterHour.Hour >= _salaryConfig.WeekendNightBegin)
+                //Now that we've sorted dayWeek and timeScheduling foreach supplement and determine which supplements the current employee is eligible to receive respective to his work(his shift) 
+                foreach (var supplementInfo in _salaryConfig.Supplements)
+                {
+                    //Is current time Schedule within the applicable day for this respective supplement
+                    if (supplementInfo.DayOfSupplement.Contains(dayWeek))
                     {
-                        if (quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.WeekendNightBegin)
+                        //Check if the supplement has any hour ranges meaning it is either null or empty
+                        if (!supplementInfo.TimeRanges.IsNullOrEmpty())
                         {
-                            continue;
-                        }
-                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                    }
-                    else if (quarterHour.Hour <= _salaryConfig.WeekendNightEnd)
-                    {
-                        if(quarterHour.Hour == _salaryConfig.WeekendNightEnd)
-                        {
-                            if (quarterHour.Minute == 0)
+                            var hourOfTimeSchedule = timeScheduling.Hour;
+                            var minuteOfTimeSchedule = timeScheduling.Minute;
+                            
+                            //There exists a time ranges required to receive the supplement
+                            foreach (var timeRange in supplementInfo.TimeRanges)
                             {
-                                nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                            }
-                            else
-                            {
-                                weekendHours += _salaryConfig.TimeTrackingInHours;
+                                var hoursBetween = GetHoursBetween(timeRange.FromHour, timeRange.ToHour);
+                                
+                                if (hoursBetween.Contains(hourOfTimeSchedule))
+                                {
+                                    if (timeRange.FromHour == hourOfTimeSchedule && minuteOfTimeSchedule == 0)
+                                    {
+                                        //We are not actually within range only on the verge the work has been down from 15 minutes before and leading up to fromHour
+                                        continue;
+                                    }
+
+                                    if (timeRange.ToHour == hourOfTimeSchedule && minuteOfTimeSchedule != 0)
+                                    {
+                                        //We are not actually within the range only because hours is int and thereby if we reach to hour == hourOfTimeSchedule this doesn't necesarilly means that the minutes arent :55 meaning 55 minutes pass the hour of discurse
+                                        continue;
+                                    }
+                                    
+                                    //We are later or equal to start of range or equal to or lower than end range
+                                    if (supplementHours.ContainsKey(supplementInfo))
+                                    {
+                                        supplementHours[supplementInfo] += _salaryConfig.TimeTrackingInHours;
+                                    }
+                                    else
+                                    {
+                                        supplementHours.Add(supplementInfo, _salaryConfig.TimeTrackingInHours);
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                        }
-                    }
-                    else
-                    {
-                        weekendHours += _salaryConfig.TimeTrackingInHours;
-                    }
-                }
-                else
-                {
-                    if(quarterHour.DayBegan(DayOfWeek.Monday))
-                    {
-                        nightWeekendHours += _salaryConfig.TimeTrackingInHours;
-                        continue;
-                    }
-
-                    if(quarterHour.Hour >= _salaryConfig.NightHourBegin)
-                    {
-                        if(quarterHour.Minute == 0 && quarterHour.Hour == _salaryConfig.NightHourBegin)
-                        {
-                            continue;
-                        }
-                        nightHours += _salaryConfig.TimeTrackingInHours;
-                    }
-                    else if (quarterHour.Hour <= _salaryConfig.NightHourEnd)
-                    {
-                        if(quarterHour.Minute == 0)
-                        {
-                            nightHours += _salaryConfig.TimeTrackingInHours;
+                            //Since there are no time range requirements for this supplement he is eligible to receive the supplement by day
+                            if (supplementHours.ContainsKey(supplementInfo))
+                            {
+                                supplementHours[supplementInfo] += _salaryConfig.TimeTrackingInHours;
+                            }
+                            else
+                            {
+                                supplementHours.Add(supplementInfo, _salaryConfig.TimeTrackingInHours);    
+                            }
                         }
                     }
                 }
             }
 
-            return new SortedWorkHours(hours, nightHours, weekendHours, nightWeekendHours);
+            return new SortedWorkHours(hours, supplementHours);
+        }
+
+        private int[] GetHoursBetween(int fromHour, int toHour)
+        {
+            var list = new List<int>();
+
+            while (fromHour != toHour)
+            {
+                list.Add(fromHour);
+                fromHour++;
+                if (fromHour == 24)
+                {
+                    fromHour = 0;
+                }
+            }
+            list.Add(toHour);
+
+            return list.ToArray();
         }
     }
 }
