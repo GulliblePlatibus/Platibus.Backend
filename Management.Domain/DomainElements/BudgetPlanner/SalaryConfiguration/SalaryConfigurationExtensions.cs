@@ -34,9 +34,10 @@ namespace Management.Domain.DomainElements.BudgetPlanner
             salaryConfiguration.AddSupplement(supplementInfo);
         }
         
-        public static void ConfigureNightSupplementForWeekDays(this SalaryConfiguration salaryConfiguration, int fromHour, int toHour, double supplement)
+        public static void ConfigureNightSupplementForWeekDays(this SalaryConfiguration salaryConfiguration, int fromHour, int toHour, Supplement supplement)
         {
             salaryConfiguration.AddSupplement(new SupplementInfo(
+                Guid.NewGuid(),
                 "Night Supplement",
                 "Night Supplement",
                 new List<DayOfWeek>{DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday},

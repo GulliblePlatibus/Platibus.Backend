@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Management.Domain.DomainElements.BudgetPlanner.ValueObjects;
 
 namespace Management.API.RequestModels
 {
@@ -6,8 +8,15 @@ namespace Management.API.RequestModels
     {
         public string Name { get; set; }
         public string Decription { get; set; }
-        public double Supplement { get; set; }
-        public string SupplementDays { get; set; }
-        public string TimeRange { get; set; }
+        public bool IsStaticSupplement { get; set; }
+        public double SupplementValue { get; set; }
+        public HashSet<DayOfWeek> SupplementDays { get; set; }
+        public List<HourInfoRequestModel> TimeRange { get; set; }
+    }
+
+    public class HourInfoRequestModel
+    {
+        public int FromHour { get; set; }
+        public int ToHour { get; set; }
     }
 }

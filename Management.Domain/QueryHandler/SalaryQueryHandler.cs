@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
+using Management.Domain.DomainElements;
 using Management.Domain.DomainElements.BudgetPlanner;
 using Management.Domain.DomainElements.BudgetPlanner.ValueObjects;
 using Management.Domain.Queries;
@@ -44,34 +45,22 @@ namespace Management.Domain.QueryHandler
        
         public async Task<IEnumerable<ShiftPayment>> HandleAsync(GetSalaryForUserWithId query, CancellationToken ct)
         {
-            var user = new User();//await _userRepository.GetByIdAsync(query.UserId);
+            var user = await _userRepository.GetByIdAsync(query.UserId);
             
-            var shifts = new List<Shift>{new Shift
-            {
-                Duration = 100,
-                EmployeeOnShift = Guid.Empty,
-                Id = Guid.Empty,
-                ShiftStart = DateTime.Today.AddHours(0),
-                ShiftEnd = DateTime.Today.AddHours(24)
-            }};//await _shiftRepository.GetForUserWithIdAsync(query.UserId);
+            var shifts = await _shiftRepository.GetForUserWithIdAsync(query.UserId);
 
             var salary = new Salary(user, SalaryConfigurationBuilder.Build(cfg =>
             {
                 cfg.UseQuarterTimeScheduling();
                 cfg.AddSupplement(
                     new SupplementInfo(
+                        Guid.NewGuid(),
                         "Night Hour",
                         "Night Hour supplement for employee",
                         new List<DayOfWeek>{DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday},
-                        40,
-                        new List<HourInfo>{new HourInfo(18, 0)}));
-                cfg.AddSupplement(
-                    new SupplementInfo(
-                        "Night Hour",
-                        "Night Hour supplement for employee",
-                        new List<DayOfWeek>{DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday},
-                        60,
-                        new List<HourInfo>{new HourInfo(0, 6)}));
+                        new Supplement(false, 40),
+                        new List<HourInfo>{new HourInfo(18, 0), new HourInfo(0,6)}));
+                
             }));
             
             

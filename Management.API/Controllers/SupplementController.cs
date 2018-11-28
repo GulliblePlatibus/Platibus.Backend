@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
@@ -6,6 +7,7 @@ using Management.Domain.Commands.ShiftCommands;
 using Management.Domain.Commands.SupplementCommands;
 using Management.Infrastructure.MessagingContracts;
 using Microsoft.AspNetCore.Mvc;
+using HourInfo = Management.Domain.DomainElements.BudgetPlanner.ValueObjects.HourInfo;
 
 namespace Management.API.Controllers
 {
@@ -19,10 +21,17 @@ namespace Management.API.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> CreateSupplement([FromBody] CreateSupplementRequestModel requestModel)
+        public async Task<IActionResult> CreateSupplement([FromBody]CreateSupplementRequestModel requestModel)
         {
+            var list = new List<HourInfo>();
+
+            foreach (var hourInfoRequestModel in requestModel.TimeRange)
+            {
+                list.Add(new HourInfo(hourInfoRequestModel.FromHour, hourInfoRequestModel.ToHour));
+            }
+            
             var response = await CommandRouter.RouteAsync<CreateSupplementCommand, IdResponse>(
-                new CreateSupplementCommand(requestModel.Name, requestModel.Decription, requestModel.Supplement, requestModel.SupplementDays, requestModel.TimeRange));
+                new CreateSupplementCommand(requestModel.Name, requestModel.Decription, requestModel.IsStaticSupplement, requestModel.SupplementValue, requestModel.SupplementDays, list));
 
             if (!response.IsSuccessful)
             {

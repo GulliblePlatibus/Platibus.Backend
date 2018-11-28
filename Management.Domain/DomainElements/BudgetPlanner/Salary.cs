@@ -15,18 +15,23 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         
         public User User { get; private set; }
         public SortedSupplements SortedSupplements { get; private set; }
+
+        private double Seniority;
+        private double Wage;
         
         public Salary(User user, ISalaryConfiguration salaryConfig)
         {
             _salaryConfig = salaryConfig;
             User = user;
+            Seniority = ResolveSeniority(user);
+            Wage = user.BaseWage;
         }
         
         public ShiftPayment ResolvePaymentsForShift(Shift shift)
         {
             var resolvedWorkHours = ResolveWorkHours(shift);
             
-            var shiftPayment = new ShiftPayment(User.Id, shift.Id, resolvedWorkHours);
+            var shiftPayment = new ShiftPayment(User.Id, Seniority, Wage, shift, resolvedWorkHours);
             
             return shiftPayment;
         }
@@ -69,6 +74,8 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
             var hourList = new List<DateTime>();
 
+            
+            
             while(DateTime.Compare(currentHour, endDate) <= 0)
             {
                 var hour = new DateTime(currentHour.Ticks);
@@ -181,7 +188,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
                 }
             }
             list.Add(toHour);
-
+            
             return list.ToArray();
         }
     }

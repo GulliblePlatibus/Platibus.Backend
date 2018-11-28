@@ -81,7 +81,6 @@ namespace Management.Domain.Handlers
             var updateShift = await ShiftRepository.GetByIdAsync(cmd.ShiftId);
             updateShift.ShiftEnd = cmd.EndTime;
             updateShift.ShiftStart = cmd.StartTime;
-            updateShift.EmployeeOnShift = cmd.EmployeeId;
 
             var result = await ShiftRepository.UpdateAsync(updateShift);
             

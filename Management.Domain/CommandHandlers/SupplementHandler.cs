@@ -23,7 +23,7 @@ namespace Management.Domain.Handlers
         {
             var id = Guid.NewGuid();
 
-            var result = await _supplementRepository.InsertAsync(new SupplementInfo
+            /*var result = await _supplementRepository.InsertAsync(new SupplementInfo
             {
                 Id = id,
                 Decription = cmd.Decription,
@@ -32,7 +32,7 @@ namespace Management.Domain.Handlers
                 SupplementDays = cmd.SupplementDays,
                 TimeRange = cmd.TimeRange
 
-            });
+            });*/
             
             return new IdResponse(id);
         }

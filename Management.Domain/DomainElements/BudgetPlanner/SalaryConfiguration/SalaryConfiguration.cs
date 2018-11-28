@@ -61,12 +61,13 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
         public string Name { get; }
         public string Description { get; }
-        public double Supplement { get; }
+        public Supplement Supplement { get; }
         public List<DayOfWeek> DayOfSupplement { get; }
         public List<HourInfo> TimeRanges { get; }
 
-        public SupplementInfo(string name, string description, List<DayOfWeek> dayOfSupplement, double supplement, List<HourInfo> timeRanges = null)
+        public SupplementInfo(Guid id, string name, string description, List<DayOfWeek> dayOfSupplement, Supplement supplement, List<HourInfo> timeRanges = null)
         {
+            Id = id;
             Name = name;
             Description = description;
             DayOfSupplement = dayOfSupplement;
