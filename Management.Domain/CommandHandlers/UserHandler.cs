@@ -7,11 +7,13 @@ using EmailValidation;
 using Management.Documents.Documents;
 using Management.Persistence.Repositories;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 
 namespace Management.Domain.Handlers
 {
 	public class UserHandler : 
-	ICommandHandler<CreateUserCommand, IdResponse> , ICommandHandler<DeleteUserByIdCommand , IdResponse> , ICommandHandler<UpdateUserCommand , IdResponse>
+	ICommandHandler<CreateUserCommand, IdResponse>, ICommandHandler<DeleteUserByIdCommand, IdResponse>,
+		ICommandHandler<UpdateUserCommand, IdResponse>
     {
 		private readonly IUserRepository _userRepository;
 	   
@@ -26,18 +28,7 @@ namespace Management.Domain.Handlers
 		{
 			//Do some logics, save the result in the persistence and return response indicating the succes state of the 
 
-			switch (cmd._acceslevel)
-			{
-				case 1:
-					// opret medarbejder
-					break;
-				case 2:
-					//opret mellemleder
-					break;
-				case 3:
-					// opret admini
-					break;
-			}
+			
 			
 			if (string.IsNullOrEmpty(cmd.Name))
 			{
@@ -100,5 +91,7 @@ namespace Management.Domain.Handlers
 		    
 		    return IdResponse.Successful(user.Id);
 	    }
+	    
+	    
     }
 }

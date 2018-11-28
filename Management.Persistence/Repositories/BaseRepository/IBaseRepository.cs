@@ -5,7 +5,7 @@ using Management.Persistence.Documents;
 
 namespace Management.Persistence.Repositories
 {
-    public interface IBaseRepository<T> where T : class, IEntity
+    public interface IBaseRepository<T> where T : class
     {
         /// <summary>
         ///

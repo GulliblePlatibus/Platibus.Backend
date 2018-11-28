@@ -1,18 +1,60 @@
 using System;
+using Management.Domain.DomainElements.BudgetPlanner.ValueObjects;
+using Management.Persistence.Model;
 
 namespace Management.Domain.DomainElements.BudgetPlanner
 {
     public class ShiftPayment
     {
-        public Guid Id { get; set; }
-        public Guid ShiftId { get; set; }
-        public int NormalHours { get; set; }
-        public double PayForNormalHours { get; set; }
-        public int NightHours { get; set; }
-        public double PayForNightHours { get; set; }
-        public int WeekendHours { get; set; }
-        public double PayForWeekendHours { get; set; }
+        public Guid UserId { get; }
+        public double Seniority { get; }
+        public double BaseWage { get; }
+        public Shift Shift { get; }
+        public SortedWorkHours SortedWorkHours { get; }
 
-        public double TotalPayment { get; set; }
+        public double TotalPayment { get; private set; }
+        
+        public ShiftPayment(Guid userId, double seniority, double baseWage, Shift shift, SortedWorkHours sortedWorkHours)
+        {
+            UserId = userId;
+            Seniority = seniority;
+            BaseWage = baseWage;
+            Shift = shift;
+            SortedWorkHours = sortedWorkHours;
+            
+            CalculateTotalPayment();
+        }
+
+
+        private void CalculateTotalPayment()
+        {
+            var calculatedBaseWage = BaseWage * Seniority;
+
+            var totalPaymentForHours = SortedWorkHours.Hours * calculatedBaseWage;
+
+            foreach (var supplementHour in SortedWorkHours.SupplementHours)
+            {
+                var suppInfo = supplementHour.Key;
+                var suppHours = supplementHour.Value;
+                var supplement = suppInfo.Supplement;
+                
+
+                if (suppInfo.Supplement.IsStaticSupplement)
+                {
+                    totalPaymentForHours += suppHours * supplement.Amount;
+                }
+                else
+                {
+                    var supplementPercentage = supplement.Amount;
+
+                    var amount = BaseWage / 100 * supplementPercentage;
+
+                    totalPaymentForHours += amount * suppHours;
+
+                }
+            }
+
+            TotalPayment = totalPaymentForHours;
+        }
     }
 }

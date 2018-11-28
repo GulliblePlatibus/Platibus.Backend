@@ -85,8 +85,6 @@ namespace Management.API.Controllers
         {
             var result = await QueryRouter.QueryAsync<GetShiftsForUserWithId, IEnumerable<Shift>>(new GetShiftsForUserWithId(id));
 
-            
-            
             return new ObjectResult(result);
         }
 
@@ -174,6 +172,16 @@ namespace Management.API.Controllers
             var result = await CommandRouter.RouteAsync<UpdateUserCommand, IdResponse>(
                 new UpdateUserCommand(userRequestModel.Name, userRequestModel.Email, userRequestModel.Password,
                     userRequestModel.Accesslevel , id));
+            
+            return new ObjectResult(result);
+        }
+
+        [HttpPost]
+        [Route("{id}/supplement{supplementId}")]
+        public async Task<IActionResult> AssignSupplementTo(Guid userID, Guid suppId)
+        {
+            var result = await CommandRouter.RouteAsync<AssignSupplementToUserCommand, IdResponse>(
+                new AssignSupplementToUserCommand(userID, suppId));
             
             return new ObjectResult(result);
         }
