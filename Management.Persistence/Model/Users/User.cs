@@ -36,9 +36,9 @@ namespace Management.Persistence.Model
 		public string Name { get; set; }
 		public string Email { get; set; }
 	    public UserRoles AccessLevel { get; set; }
-	    public double Wage { get; set; }
 	    public Guid Id { get; set; }
-	    
+	    public double BaseWage { get; set; }
+	    public DateTime EmploymentDate { get; set; }
 		
     }
 }

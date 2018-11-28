@@ -14,7 +14,7 @@ namespace Management.Domain.Commands
 	    public double Wage { get; }
 	    public DateTime EmploymentDate { get; }
 
-		public CreateUserCommand(Guid id, string name, string email, string password, UserRoles acceslevel, double wage)
+		public CreateUserCommand(Guid id, string name, string email, string password, UserRoles acceslevel, double wage , DateTime employmentDate)
 		{
 			if (id.Equals(Guid.Empty))
 			{
