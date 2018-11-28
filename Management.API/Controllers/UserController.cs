@@ -34,12 +34,15 @@ namespace Management.API.Controllers
         {
             _identityConfig = identityConfig;
         }
+        
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetALLUsers()
         {
             var result = await QueryRouter.QueryAsync<GetUsers, IEnumerable<User>>(new GetUsers());
+
+            
 
             return new ObjectResult(result);
 

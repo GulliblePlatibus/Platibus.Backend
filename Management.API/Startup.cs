@@ -69,8 +69,8 @@ namespace Management.API
 			//The api comes with standard dependency-injection, which is not that complicated nor have much functionality.
 			//So we can re-configure the IOC container with our StructureMapRegistry.
 			var container = new Container(new WebRegistry());
+            
 
-			
 			//Settings for Dapper fluentmap 
 			// Multiple ID's
 			// https://github.com/henkmollema/Dommel

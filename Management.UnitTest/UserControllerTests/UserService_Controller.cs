@@ -1,46 +1,53 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Management.API.Controllers;
 using Management.Persistence.Model;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+using Management.Infrastructure.MessagingContracts;
+using Microsoft.Extensions.Options;
+using Management.API.Helpers;
+using Management.API.Registry;
+using StructureMap;
 
 namespace Management.UnitTest.User.Controllers
 {
     [TestClass]
     public class UserService_Controller
     {
-        private UserController _userController;
+        private IContainer container;
+        private UserController userCon;
 
-        public UserService_Controller(UserController userController)
+
+        [TestInitialize]
+        public void Setup()
         {
-            _userController = userController;
+            container = new Container(new Registry());
+            userCon = container.GetInstance<UserController>();
         }
 
         [TestMethod]
-        public async void GetBydId_OptionalValuesFromGet_AssertedEqual()
+        public async Task GetBydId_TestUserAsParam_AssertedEqual()
         {
             var expectedUser = getTestUser();
-            await _userController.CreateUser(new API.RequestModels.CreateUserRequestModel()
-            {
-                Name = expectedUser.Name, 
-                Email = expectedUser.Email, 
-                Password = "test", 
-                Acceslevel = expectedUser.AccessLevel, 
-               // Wage = expectedUser.BaseWage 
-            }); 
+            var result = await userCon.GetById(expectedUser.Id) as ObjectResult;
+            var actualUser = result.Value as Management.Persistence.Model.User;
 
-           // var gottenUser = _userController.GetById(); 
+            Assert.AreEqual(expectedUser.Id, actualUser.Id);
         }
-
+        
         public Management.Persistence.Model.User getTestUser()
         {
-            var testUser = new Management.Persistence.Model.User()
+            return new Management.Persistence.Model.User()
             {
-                Name = "TestName",
-                Email = "Test@Test.com",
+                Id = System.Guid.Parse("3730ec16-2e67-4e8e-9b43-6fa18dd8a02d"),
+                Name = "TESTname",
+                Email = "TEST@gmail.com",
                 AccessLevel = 2,
                 BaseWage = 100,
-                EmploymentDate = System.DateTime.Parse("20-08-1994")
+                EmploymentDate = System.DateTime.Parse("2016-11-11T00:00:00")
             };
-            return testUser;
+            
         }
     }
 }
