@@ -1,5 +1,6 @@
 using System;
 using Management.Documents.Documents;
+using Management.Persistence.Model;
 using SimpleSoft.Mediator;
 
 namespace Management.Domain.Commands
@@ -9,10 +10,10 @@ namespace Management.Domain.Commands
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public int Acceslevel { get; set; }
+        public UserRoles Acceslevel { get; set; }
         public Guid Id { get; set; }
 
-        public UpdateUserCommand(string name, string email, string password, int acceslevel , Guid Id)
+        public UpdateUserCommand(string name, string email, string password, UserRoles acceslevel , Guid Id)
         {
             Name = name;
             Email = email;

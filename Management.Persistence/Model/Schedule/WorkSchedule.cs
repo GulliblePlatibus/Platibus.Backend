@@ -8,9 +8,9 @@ namespace Management.Persistence.Model
     {
         public WorkScheduleMap()
         {
-            ToTable("hasShift");
-            Map(x => x.Id).ToColumn("employeeid").IsKey();
-            Map(x => x.ShiftId).ToColumn("shiftid");
+            ToTable("hasshift");
+            Map(x => x.ShiftId).ToColumn("shiftid").IsKey();
+            Map(x => x.Id).ToColumn("employeeid");
 
         }
     }

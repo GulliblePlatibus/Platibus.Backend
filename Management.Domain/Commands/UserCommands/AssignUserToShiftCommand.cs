@@ -10,10 +10,7 @@ namespace Management.Domain.Commands
 
         public AssignUserToShiftCommand(Guid id, Guid shiftId)
         {
-            if (id.Equals(Guid.Empty))
-            {
-                throw new ArgumentException(nameof(id) + " CreateUserCommand may not be initiated with a id value of Guid.Empty");
-            }
+            
 
             Id = id;
             ShiftId = shiftId;

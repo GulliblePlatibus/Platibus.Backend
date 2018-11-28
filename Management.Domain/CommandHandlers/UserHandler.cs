@@ -28,18 +28,7 @@ namespace Management.Domain.Handlers
 		{
 			//Do some logics, save the result in the persistence and return response indicating the succes state of the 
 
-			switch (cmd._acceslevel)
-			{
-				case 1:
-					// opret medarbejder
-					break;
-				case 2:
-					//opret mellemleder
-					break;
-				case 3:
-					// opret admini
-					break;
-			}
+			
 			
 			if (string.IsNullOrEmpty(cmd.Name))
 			{

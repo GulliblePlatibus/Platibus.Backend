@@ -11,7 +11,7 @@ using Npgsql;
 
 namespace Management.Persistence.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
     //***********************PROPERTIES ***************************
 
@@ -46,7 +46,8 @@ namespace Management.Persistence.Repositories
             {
                 conn.Open();
 
-                var a = conn.Insert(valueList);
+                
+                var a = conn.InsertAsync(valueList);
                 return a as T;
             }
         }
@@ -65,16 +66,15 @@ namespace Management.Persistence.Repositories
 
         public async Task<T> GetByIdAsync(Guid id)
         {
-            if (id.Equals(Guid.Empty))
-            {
-                return null;
-            }
+            
             
             using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 conn.Open();
 
-                return conn.Get<T>(id);
+                var a = conn.Get<T>(id);
+                return a;
+
             }
         }
 

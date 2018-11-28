@@ -20,26 +20,30 @@ namespace Management.Domain.Handlers
         
         public async Task<IdResponse> HandleAsync(AssignUserToShiftCommand cmd, CancellationToken ct)
         {
-            if (cmd.Id.Equals(Guid.Empty) || cmd.ShiftId.Equals(Guid.Empty))
+            
+            
+            // if guid is empty delete employee from shift
+            if (!cmd.Id.Equals(Guid.Empty))
             {
-                return IdResponse.Unsuccessful("Employee Id or shift Id is empty");
+                var assignedUser = new WorkSchedule
+                {
+                    Id = cmd.Id,
+                    ShiftId = cmd.ShiftId
+                };
+
+                var result = await _workScheduleRepository.InsertAsync(assignedUser);
+                
+                return new IdResponse(assignedUser.Id);
             }
 
-            var assignedUser = new WorkSchedule
-            {
-                Id = cmd.Id,
-                ShiftId = cmd.ShiftId,
-                
-                
-            };
-
-            var result = await _workScheduleRepository.InsertAsync(assignedUser);
+            var shift = await _workScheduleRepository.GetByIdAsync(cmd.ShiftId);
+            await _workScheduleRepository.DeleteByTAsync(shift);
 
            /* var shiftToUpdate = await _shiftRepository.GetByIdAsync(cmd.ShiftId);
             shiftToUpdate.EmployeeOnShift = cmd.Id;
             var result1 = await _shiftRepository.UpdateAsync(shiftToUpdate);
 */            
-            return new IdResponse(assignedUser.Id);
+            return new IdResponse(Guid.Empty);
 
         }
     }

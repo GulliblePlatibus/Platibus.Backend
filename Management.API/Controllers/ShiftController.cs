@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Management.API.RequestModels;
 using Management.Documents.Documents;
+using Management.Domain.Commands;
 using Management.Domain.Commands.ShiftCommands;
 using Management.Domain.Queries;
 using Management.Domain.Queries.Shift;
 using Management.Infrastructure.MessagingContracts;
 using Management.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
+using AddManyShifts = Management.API.RequestModels.AddManyShifts;
 
 namespace Management.API.Controllers
 {
@@ -84,9 +86,20 @@ namespace Management.API.Controllers
         {
             var result = await CommandRouter.RouteAsync<AssignUserToShiftCommand, IdResponse>(
                 new AssignUserToShiftCommand(addUserToShiftRequestModel.EmployeeOnShift,
-                    addUserToShiftRequestModel.ShiftStart, addUserToShiftRequestModel.ShiftEnd,
                     addUserToShiftRequestModel.id));
+           
+            return new ObjectResult(result);
+        }
+        
+        [HttpPost]
+        [Route("AddManyShifts")]
+        public async Task<IActionResult> AddManyShifts([FromBody] AddManyShifts addUserToShiftRequestModel)
+        {
+            var result = await CommandRouter.RouteAsync<AddManyShiftsCommand, IdResponse>(
+                new AddManyShiftsCommand(addUserToShiftRequestModel.listOfShifts));
             
+            
+
             return new ObjectResult(result);
         }
     }

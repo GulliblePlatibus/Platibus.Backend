@@ -4,6 +4,16 @@ using Management.Persistence.Documents;
 namespace Management.Persistence.Model
 {
 
+
+	public enum UserRoles
+{
+	Admin,
+	Administrative,
+	Manager,
+	Employee,
+	Unknown
+}
+
 	public class UserMap : DommelEntityMap<User>
 	{
 		
@@ -22,12 +32,12 @@ namespace Management.Persistence.Model
 	
 	public class User : IEntity
     {
-		public Guid Id { get; set; }
+		
 		public string Name { get; set; }
 		public string Email { get; set; }
-	    public int AccessLevel { get; set; }
-	    public double BaseWage { get; set; }
-	    public DateTime EmploymentDate { get; set; }
+	    public UserRoles AccessLevel { get; set; }
+	    public double Wage { get; set; }
+	    public Guid Id { get; set; }
 	    
 		
     }

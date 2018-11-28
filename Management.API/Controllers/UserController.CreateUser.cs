@@ -35,7 +35,7 @@ namespace Management.API.Controllers
             //Serialize object to json-format
             var json = JsonConvert.SerializeObject(new CreateIdentityUser
             {
-                AuthLevel = requestModel.Acceslevel,
+                AuthLevel = requestModel.AccessLevel,
                 Email = requestModel.Email,
                 Password = requestModel.Password
             }, Formatting.Indented);

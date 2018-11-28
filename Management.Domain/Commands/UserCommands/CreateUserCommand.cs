@@ -1,18 +1,20 @@
 ﻿using System;
 using Management.Domain.Documents;
+using Management.Persistence.Model;
+
 namespace Management.Domain.Commands
 {
 	public class CreateUserCommand : CommandWithIdResponse
     {
 	    public Guid Id { get; }
-	    public int _acceslevel { get;  }
+	    public UserRoles _acceslevel { get;  }
 	    public string Name { get; }
 		public string Email { get; }
 		public string Password { get; }
 	    public double Wage { get; }
 	    public DateTime EmploymentDate { get; }
 
-		public CreateUserCommand(Guid id, string name, string email, string password, int acceslevel, double wage, DateTime employmentDate )
+		public CreateUserCommand(Guid id, string name, string email, string password, UserRoles acceslevel, double wage)
 		{
 			if (id.Equals(Guid.Empty))
 			{
