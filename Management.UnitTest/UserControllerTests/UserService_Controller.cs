@@ -43,7 +43,7 @@ namespace Management.UnitTest.User.Controllers
                 Id = System.Guid.Parse("3730ec16-2e67-4e8e-9b43-6fa18dd8a02d"),
                 Name = "TESTname",
                 Email = "TEST@gmail.com",
-                AccessLevel = 2,
+                AccessLevel = UserRoles.Manager,
                 BaseWage = 100,
                 EmploymentDate = System.DateTime.Parse("2016-11-11T00:00:00")
             };
