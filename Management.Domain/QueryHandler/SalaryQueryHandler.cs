@@ -46,7 +46,7 @@ namespace Management.Domain.QueryHandler
         public async Task<IEnumerable<ShiftPayment>> HandleAsync(GetSalaryForUserWithId query, CancellationToken ct)
         {
             var user = await _userRepository.GetByIdAsync(query.UserId);
-            
+            user.BaseWage = 100;
             var shifts = await _shiftRepository.GetForUserWithIdAsync(query.UserId, query.FromtDate, query.ToDate);
 
             var salary = new Salary(user, SalaryConfigurationBuilder.Build(cfg =>
@@ -60,6 +60,20 @@ namespace Management.Domain.QueryHandler
                         new List<DayOfWeek>{DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday},
                         new Supplement(false, 40),
                         new List<HourInfo>{new HourInfo(18, 0), new HourInfo(0,6)}));
+                cfg.AddSupplement(
+                    new SupplementInfo(
+                        Guid.NewGuid(),
+                        "Weekend Hours",
+                        "Supplement for weekend hours",
+                        new List<DayOfWeek>{DayOfWeek.Saturday, DayOfWeek.Sunday},
+                        new Supplement(true, 20)));
+                cfg.AddSupplement(
+                    new SupplementInfo(
+                        Guid.NewGuid(),
+                        "Sunday Night",
+                        "Supllement for sunday night hours",
+                        new List<DayOfWeek>{DayOfWeek.Sunday},
+                        new Supplement(true, 30)));
                 
             }));
             
