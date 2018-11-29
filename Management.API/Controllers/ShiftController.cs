@@ -30,7 +30,7 @@ namespace Management.API.Controllers
 
             Console.WriteLine();
             var response = await CommandRouter.RouteAsync<CreateShiftCommand, IdResponse>(
-                new CreateShiftCommand(requestModel.ShiftStart, requestModel.ShiftEnd));
+                new CreateShiftCommand(requestModel.ShiftStart, requestModel.ShiftEnd , requestModel.EmployeeId));
 
             if (!response.IsSuccessful)
             {
@@ -71,11 +71,11 @@ namespace Management.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> UpdateShiftById(Guid id, [FromBody] UpdateShiftRequestModel shiftRequestModel)
+        [Route("Update")]
+        public async Task<IActionResult> UpdateShiftById( [FromBody] UpdateShiftRequestModel shiftRequestModel)
         {
             var result = await CommandRouter.RouteAsync<UpdateShiftCommand, IdResponse>(
-                new UpdateShiftCommand(id, shiftRequestModel.ShiftStart, shiftRequestModel.ShiftEnd));
+                new UpdateShiftCommand(shiftRequestModel.ShiftId, shiftRequestModel.ShiftStart, shiftRequestModel.ShiftEnd , shiftRequestModel.EmployeeId));
 
             return new ObjectResult(result);
         }
@@ -99,6 +99,19 @@ namespace Management.API.Controllers
                 new AddManyShiftsCommand(addUserToShiftRequestModel.listOfShifts));
             
             
+
+            return new ObjectResult(result);
+        }
+
+        [HttpPost]
+        [Route("UpdateShiftAndEmployee")]
+        public async Task<IActionResult> UpdateShiftAndEmployee(
+            [FromBody] UpdateShiftAndEmployeeRequestModel updateShiftAndEmployeeRequestModel)
+        {
+
+            var result = await CommandRouter.RouteAsync<CreateShiftWithEmployeeCommand, IdResponse>(
+                new CreateShiftWithEmployeeCommand(updateShiftAndEmployeeRequestModel.ShiftStart,
+                    updateShiftAndEmployeeRequestModel.ShiftEnd , updateShiftAndEmployeeRequestModel.EmployeeId));
 
             return new ObjectResult(result);
         }
