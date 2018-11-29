@@ -108,18 +108,18 @@ namespace Management.API.Controllers
 
         
         [HttpGet]
-        [Route("salary/{id}")]
-        public async Task<IActionResult> GetSalaryForUserWithIdAsync(Guid id)
+        [Route("{id}/salary")]
+        public async Task<IActionResult> GetSalaryForUserWithIdAsync(Guid id, DateTime fromDate, DateTime toDate)
         {
-            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>(new GetSalaryForUserWithId(id));
-            
+            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>(new GetSalaryForUserWithId(id, fromDate, toDate));
+
+            if (result == null)
+            {
+                return NotFound();
+            }
             
             return new ObjectResult(result);
         }
-        
-       
-        
-        
         
         
         [HttpPut]

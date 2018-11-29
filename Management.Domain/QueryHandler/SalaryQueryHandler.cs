@@ -47,7 +47,7 @@ namespace Management.Domain.QueryHandler
         {
             var user = await _userRepository.GetByIdAsync(query.UserId);
             
-            var shifts = await _shiftRepository.GetForUserWithIdAsync(query.UserId);
+            var shifts = await _shiftRepository.GetForUserWithIdAsync(query.UserId, query.FromtDate, query.ToDate);
 
             var salary = new Salary(user, SalaryConfigurationBuilder.Build(cfg =>
             {
@@ -62,7 +62,6 @@ namespace Management.Domain.QueryHandler
                         new List<HourInfo>{new HourInfo(18, 0), new HourInfo(0,6)}));
                 
             }));
-            
             
             var shiftPayments = salary.ResolvePaymentForShifts(shifts);
             

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -21,30 +22,26 @@ namespace Management.Domain.QueryHandler
                 ShiftRepository = shiftRepository;
             }
         
-            
-                public async Task<IEnumerable<Shift>> HandleAsync(GetAllShifts query, CancellationToken ct)
-                {
-                    var result = ShiftRepository.GetAllAsync();
-    
-                    return await result;
-                }
-    
-                public async Task<Shift> HandleAsync(GetShiftById query, CancellationToken ct)
-                {
-                    var result = ShiftRepository.GetByIdAsync(query.Id);
-    
-                    return await result;
-                }
-            
-                public async Task<IEnumerable<Shift>> HandleAsync(GetShiftsForUserWithId query, CancellationToken ct)
-                {
-                    var result = ShiftRepository.GetForUserWithIdAsync(query.Id);
-                    
-                    return await result;
-                }
-            
-            
-            
+            public async Task<IEnumerable<Shift>> HandleAsync(GetAllShifts query, CancellationToken ct)
+            {
+                var result = ShiftRepository.GetAllAsync();
+
+                return await result;
+            }
+
+            public async Task<Shift> HandleAsync(GetShiftById query, CancellationToken ct)
+            {
+                var result = ShiftRepository.GetByIdAsync(query.Id);
+
+                return await result;
+            }
+        
+            public async Task<IEnumerable<Shift>> HandleAsync(GetShiftsForUserWithId query, CancellationToken ct)
+            {
+                var result = ShiftRepository.GetForUserWithIdAsync(query.Id, DateTime.MinValue, DateTime.MaxValue);
+                
+                return await result;
+            }
         }
     }
     

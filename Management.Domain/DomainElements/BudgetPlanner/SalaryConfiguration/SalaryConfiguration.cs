@@ -75,4 +75,14 @@ namespace Management.Domain.DomainElements.BudgetPlanner
             TimeRanges = timeRanges;
         }
     }
+
+
+    public class ExtendedSupplementInfo : SupplementInfo
+    {
+        public double Value { get; set; }
+        
+        public ExtendedSupplementInfo(Guid id, string name, string description, List<DayOfWeek> dayOfSupplement, Supplement supplement, List<HourInfo> timeRanges = null) : base(id, name, description, dayOfSupplement, supplement, timeRanges)
+        {
+        }
+    }
 }

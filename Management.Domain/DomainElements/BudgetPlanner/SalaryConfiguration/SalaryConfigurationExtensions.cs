@@ -140,5 +140,20 @@ namespace Management.Domain.DomainElements.BudgetPlanner
             return hours;
         }
 
+        public static List<ExtendedSupplementInfo> ToExtendedSuppList(this Dictionary<SupplementInfo, double> dic)
+        {
+            var list = new List<ExtendedSupplementInfo>();
+            
+            foreach (var d in dic)
+            {
+                list.Add(new ExtendedSupplementInfo(d.Key.Id, d.Key.Name, d.Key.Description, d.Key.DayOfSupplement, d.Key.Supplement, d.Key.TimeRanges)
+                {
+                    Value = d.Value
+                });
+            }
+
+            return list;
+        }
+
     }
 }

@@ -13,7 +13,7 @@ namespace Management.Persistence.Repositories
 {
     public interface IShiftRepository : IBaseRepository<Shift>
     {
-        Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid Id);
+        Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid Id, DateTime fromDate, DateTime toDate);
         Task<IdResponse> UpdateEmployeeOnShift(Guid employeeId, Guid ShiftID);
         
     }
@@ -29,27 +29,27 @@ namespace Management.Persistence.Repositories
             ConnectionString = _connectionString;
         }
 
-        public async Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid id)
+        public async Task<IEnumerable<Shift>> GetForUserWithIdAsync(Guid id, DateTime fromDate, DateTime toDate)
         {
-                using (var conn = new NpgsqlConnection(ConnectionString.GetConnectionString()))
+            using (var conn = new NpgsqlConnection(ConnectionString.GetConnectionString()))
+            {
+                conn.Open();
+
+                var result = await conn.QueryAsync<Shift>("SELECT * FROM shifts WHERE Id IN (SELECT shiftId FROM hasShift WHERE employeeId = @Id)", new {Id = id}); //TODO : <-- Discuss SQL injection attack
+
+                if (result == null)
                 {
-                    conn.Open();
-
-                    var result = await conn.QueryAsync<Shift>("SELECT * FROM shifts WHERE Id IN (SELECT shiftId FROM hasShift WHERE employeeId = @Id)", new {Id = id}); //TODO : <-- Discuss SQL injection attack
-                   
-                    
-                    //https://stackoverflow.com/questions/13653461/dapper-and-sql-injections/13653484
-                    // https://github.com/StackExchange/Dapper
-                    
-                  
-                   if (result == null)
-                    {
-                        return new List<Shift>();
-                    }
-
-                    return result;
+                    return new List<Shift>();
                 }
-            
+                
+                var sortOutDates = result.Where(x =>
+                    x.ShiftStart.CompareTo(fromDate) > 0 && x.ShiftStart.CompareTo(toDate) < 0);
+                
+                //https://stackoverflow.com/questions/13653461/dapper-and-sql-injections/13653484
+                // https://github.com/StackExchange/Dapper
+                
+                return sortOutDates;
+            }
         }
 
         public async Task<IdResponse> UpdateEmployeeOnShift(Guid employeeId , Guid ShiftID)
