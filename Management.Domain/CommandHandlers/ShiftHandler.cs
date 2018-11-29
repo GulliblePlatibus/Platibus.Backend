@@ -10,14 +10,18 @@ using SimpleSoft.Mediator;
 namespace Management.Domain.Handlers
 {
     public class ShiftHandler : 
-    ICommandHandler<CreateShiftCommand, IdResponse>  , ICommandHandler<AddManyShiftsCommand , IdResponse > ,
-        ICommandHandler<DeleteShiftByIdCommand , IdResponse>
+    ICommandHandler<CreateShiftCommand, IdResponse>  , ICommandHandler<AddManyShiftsCommand , IdResponse > , ICommandHandler<UpdateShiftCommand , IdResponse> ,
+        ICommandHandler<DeleteShiftByIdCommand , IdResponse> , ICommandHandler<CreateShiftWithEmployeeCommand , IdResponse>
     {
+        private readonly IWorkScheduleRepository _workScheduleRepository;
+        private readonly IUserRepository _userRepository;
         private IShiftRepository ShiftRepository { get; }
 
 
-        public ShiftHandler(IShiftRepository shiftRepository)
+        public ShiftHandler(IShiftRepository shiftRepository , IWorkScheduleRepository workScheduleRepository , IUserRepository userRepository)
         {
+            _workScheduleRepository = workScheduleRepository;
+            _userRepository = userRepository;
             ShiftRepository = shiftRepository;
         }
         
@@ -27,19 +31,57 @@ namespace Management.Domain.Handlers
             {
                 return IdResponse.Unsuccessful("cannot create a shift with an end time before the start time");
             }
-
-            var id = Guid.NewGuid();
-
-            var result = await ShiftRepository.InsertAsync(new Shift
-            {
-                Id = id,
-                ShiftStart = cmd.ShiftStart,
-                ShiftEnd = cmd.ShiftEnd,
-               //Duration = cmd.ShiftEnd.Subtract(cmd.ShiftStart).TotalHours
-               
-            });
             
-            return new IdResponse(id);
+            
+            var id = Guid.NewGuid();
+            
+            
+
+            if (cmd.EmployeeId.Equals(Guid.Empty))
+            {
+                
+                var result = await ShiftRepository.InsertAsync(new Shift
+                {
+                    Id = id,
+                    ShiftStart = cmd.ShiftStart,
+                    ShiftEnd = cmd.ShiftEnd,
+                    //Duration = cmd.ShiftEnd.Subtract(cmd.ShiftStart).TotalHours
+               
+                });
+                return new IdResponse(id);
+            }
+            else
+            {
+                var allShiftswithEmployee = await _workScheduleRepository.GetUserShiftDetailed();
+
+                foreach (var VARIABLE in allShiftswithEmployee)
+                {
+                    if (cmd.ShiftStart.Date.Equals(VARIABLE.shiftstart.Date) && VARIABLE.id.Equals(cmd.EmployeeId))
+                    {
+                        return new IdResponse(id);
+                    }
+                }
+                
+                var result = await ShiftRepository.InsertAsync(new Shift
+                {
+                    Id = id,
+                    ShiftStart = cmd.ShiftStart,
+                    ShiftEnd = cmd.ShiftEnd,
+                    //Duration = cmd.ShiftEnd.Subtract(cmd.ShiftStart).TotalHours
+               
+                });
+                
+                
+
+                var employeeOnShift = _workScheduleRepository.InsertAsync(new WorkSchedule
+                {
+                    ShiftId = id,
+                    Id = cmd.EmployeeId
+                });
+                
+                return new IdResponse(id);
+            }
+           
         }
         
         public async Task<IdResponse> HandleAsync(DeleteShiftByIdCommand cmd, CancellationToken ct)
@@ -58,10 +100,7 @@ namespace Management.Domain.Handlers
 
         public async Task<IdResponse> HandleAsync(UpdateShiftCommand cmd, CancellationToken ct)
         {
-            if (cmd.Id.Equals(Guid.Empty))
-            {
-                return IdResponse.Unsuccessful("User id is empty");
-            }
+           
 
             var Shift = new Shift
             {
@@ -70,8 +109,48 @@ namespace Management.Domain.Handlers
                 ShiftEnd = cmd.ShiftEnd,
             };
 
-            var result = await ShiftRepository.UpdateAsync(Shift);
-		    
+            var shiftResult = await ShiftRepository.UpdateAsync(Shift);
+
+            if (cmd.Employeeid.Equals(Guid.Empty))
+            {
+                var work = new WorkSchedule
+                {
+                    Id = cmd.Employeeid,
+                    ShiftId = cmd.Id
+                };
+
+                _workScheduleRepository.DeleteByTAsync(work);
+            }
+            else
+            {
+                
+                var allShiftswithEmployee = await _workScheduleRepository.GetUserShiftDetailed();
+
+                foreach (var VARIABLE in allShiftswithEmployee)
+                {
+                    if (cmd.ShiftStart.Date.Equals(VARIABLE.shiftstart.Date) && VARIABLE.id.Equals(cmd.Employeeid))
+                    {
+                        return new IdResponse(cmd.Id);
+                    }
+                }
+                
+                var workschedule = new WorkSchedule
+                {
+                    Id = cmd.Employeeid,
+                    ShiftId = cmd.Id
+                
+                };
+
+                var hasshift = await _workScheduleRepository.UpdateAsync(workschedule);
+
+
+                if (!hasshift)
+                {
+                    await _workScheduleRepository.InsertAsync(workschedule);
+                }
+            }
+            
+            
 		    
             return IdResponse.Successful(Shift.Id);
         }
@@ -88,6 +167,36 @@ namespace Management.Domain.Handlers
              
 
             return IdResponse.Successful(Guid.NewGuid());
+        }
+
+        public async Task<IdResponse> HandleAsync(CreateShiftWithEmployeeCommand cmd, CancellationToken ct)
+        {
+            
+            var id = Guid.NewGuid();
+            var shiftId = await ShiftRepository.InsertAsync(new Shift
+            {
+                Duration = 0.0,
+                Id = id,
+                ShiftEnd = cmd.Enddate,
+                ShiftStart = cmd.StartDate
+            });
+
+            
+
+            
+            
+
+            var result = await _workScheduleRepository.InsertAsync(new WorkSchedule
+            {
+                Id = cmd.EmployeeId,
+                ShiftId = id
+            });
+            
+            
+            
+            
+            
+            return IdResponse.Successful(id);
         }
     }
 }
