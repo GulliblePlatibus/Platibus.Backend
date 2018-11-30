@@ -137,8 +137,7 @@ namespace Management.API.Controllers
             {
                 Email = userRequestModel.Email,
                 Password = userRequestModel.Password,
-                AuthLevel = userRequestModel.Accesslevel,
-                
+                AuthLevel = userRequestModel.AccessLevel,
                 
             }, Formatting.Indented);
             
@@ -162,16 +161,16 @@ namespace Management.API.Controllers
                     userRequestModel.Name = user.Name;
                 if (string.IsNullOrWhiteSpace(userRequestModel.Email) && !string.IsNullOrWhiteSpace(user.Email))
                     userRequestModel.Email = user.Email;
-                if (userRequestModel.Accesslevel == 0)
-                    userRequestModel.Accesslevel = user.AccessLevel;
-                if (userRequestModel.Wage != user.BaseWage)
+                if (userRequestModel.AccessLevel == 0)
+                    userRequestModel.AccessLevel = user.AccessLevel;
+                if (userRequestModel.Wage != Double.NegativeInfinity)
                     userRequestModel.Wage = user.BaseWage;
             }
 
             
             var result = await CommandRouter.RouteAsync<UpdateUserCommand, IdResponse>(
                 new UpdateUserCommand(userRequestModel.Name, userRequestModel.Email, userRequestModel.Password,
-                    userRequestModel.Accesslevel , id));
+                    userRequestModel.AccessLevel, userRequestModel.Wage, userRequestModel.EmploymentDate,  id));
             
             return new ObjectResult(result);
         }

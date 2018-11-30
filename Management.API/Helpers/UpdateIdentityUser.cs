@@ -1,3 +1,4 @@
+using System;
 using Management.Persistence.Model;
 
 namespace Management.API.Helpers

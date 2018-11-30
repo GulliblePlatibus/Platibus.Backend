@@ -83,6 +83,8 @@ namespace Management.Domain.Handlers
 			    Name = cmd.Name,
 			    Email = cmd.Email,
 			    AccessLevel = cmd.Acceslevel,
+			    BaseWage = cmd.Wage,
+			    EmploymentDate = cmd.EmploymentDate,
 			    Id = cmd.Id
 		    };
 
