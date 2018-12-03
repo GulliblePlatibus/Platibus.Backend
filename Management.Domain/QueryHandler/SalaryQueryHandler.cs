@@ -46,7 +46,6 @@ namespace Management.Domain.QueryHandler
         public async Task<IEnumerable<ShiftPayment>> HandleAsync(GetSalaryForUserWithId query, CancellationToken ct)
         {
             var user = await _userRepository.GetByIdAsync(query.UserId);
-            user.BaseWage = 100;
             var shifts = await _shiftRepository.GetForUserWithIdAsync(query.UserId, query.FromtDate, query.ToDate);
 
             var salary = new Salary(user, SalaryConfigurationBuilder.Build(cfg =>
