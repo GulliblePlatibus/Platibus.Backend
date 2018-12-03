@@ -108,18 +108,18 @@ namespace Management.API.Controllers
 
         
         [HttpGet]
-        [Route("salary/{id}")]
-        public async Task<IActionResult> GetSalaryForUserWithIdAsync(Guid id)
+        [Route("{id}/salary")]
+        public async Task<IActionResult> GetSalaryForUserWithIdAsync(Guid id, DateTime fromDate, DateTime toDate)
         {
-            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>(new GetSalaryForUserWithId(id));
-            
+            var result = await QueryRouter.QueryAsync<GetSalaryForUserWithId, IEnumerable<ShiftPayment>>(new GetSalaryForUserWithId(id, fromDate, toDate));
+
+            if (result == null)
+            {
+                return NotFound();
+            }
             
             return new ObjectResult(result);
         }
-        
-       
-        
-        
         
         
         [HttpPut]
@@ -137,8 +137,7 @@ namespace Management.API.Controllers
             {
                 Email = userRequestModel.Email,
                 Password = userRequestModel.Password,
-                AuthLevel = userRequestModel.Accesslevel,
-                
+                AuthLevel = userRequestModel.AccessLevel,
                 
             }, Formatting.Indented);
             
@@ -162,16 +161,16 @@ namespace Management.API.Controllers
                     userRequestModel.Name = user.Name;
                 if (string.IsNullOrWhiteSpace(userRequestModel.Email) && !string.IsNullOrWhiteSpace(user.Email))
                     userRequestModel.Email = user.Email;
-                if (userRequestModel.Accesslevel == 0)
-                    userRequestModel.Accesslevel = user.AccessLevel;
-                if (userRequestModel.Wage != user.BaseWage)
+                if (userRequestModel.AccessLevel == 0)
+                    userRequestModel.AccessLevel = user.AccessLevel;
+                if (userRequestModel.Wage == 0)
                     userRequestModel.Wage = user.BaseWage;
             }
 
             
             var result = await CommandRouter.RouteAsync<UpdateUserCommand, IdResponse>(
                 new UpdateUserCommand(userRequestModel.Name, userRequestModel.Email, userRequestModel.Password,
-                    userRequestModel.Accesslevel , id));
+                    userRequestModel.AccessLevel, userRequestModel.Wage, userRequestModel.EmploymentDate,  id));
             
             return new ObjectResult(result);
         }

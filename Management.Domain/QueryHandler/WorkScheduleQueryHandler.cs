@@ -37,10 +37,6 @@ namespace Management.Domain.QueryHandler
             
             var resultList = new List<AllShiftsWithEmployees>();
 
-            
-            
-            
-            
             foreach (var shift in AllShifts) 
             {
                 foreach (var ShiftWithEmployee in ShiftsWithEmployees)

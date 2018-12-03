@@ -12,6 +12,7 @@ namespace Management.Persistence.Model
         public DateTime shiftstart { get; set; }
         public DateTime Shiftend { get; set; }
         public Guid id { get; set; }
+        public Guid shiftid { get; set; }
 
 
         public UserShiftDetailed()

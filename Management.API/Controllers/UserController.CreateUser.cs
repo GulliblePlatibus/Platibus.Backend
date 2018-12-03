@@ -37,7 +37,9 @@ namespace Management.API.Controllers
             {
                 AuthLevel = requestModel.AccessLevel,
                 Email = requestModel.Email,
-                Password = requestModel.Password
+                Password = requestModel.Password, 
+                
+                
             }, Formatting.Indented);
             
             var httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
@@ -58,7 +60,7 @@ namespace Management.API.Controllers
 
             //Since the result was succesfull, try and read the result for an id generated from the identityServer
             var id = await ReadGuidFromResponse(identityResult);
-            
+ 
             var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
                 new CreateUserCommand(id, requestModel.Name, requestModel.Email, requestModel.Password , requestModel.AccessLevel, requestModel.Wage, requestModel.EmploymentDate));
             

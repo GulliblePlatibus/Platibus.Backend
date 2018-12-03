@@ -7,9 +7,9 @@ namespace Management.Domain.DomainElements.BudgetPlanner.ValueObjects
     public class SortedWorkHours
     {
         public double Hours { get; }
-        public Dictionary<SupplementInfo, double> SupplementHours { get; }
+        public List<ExtendedSupplementInfo> SupplementHours { get; }
 
-        public SortedWorkHours(double hours, Dictionary<SupplementInfo, double> supplementHours)
+        public SortedWorkHours(double hours, List<ExtendedSupplementInfo> supplementHours)
         {
             Hours = hours;
             SupplementHours = supplementHours;

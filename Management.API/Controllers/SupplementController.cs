@@ -40,12 +40,7 @@ namespace Management.API.Controllers
 
             return new ObjectResult(response.Id);
         }
-        
-        
-
-    }
-        
-        
+    } 
 }
     
    

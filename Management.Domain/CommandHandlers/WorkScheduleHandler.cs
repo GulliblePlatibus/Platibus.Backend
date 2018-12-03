@@ -23,7 +23,7 @@ namespace Management.Domain.Handlers
             
             
             // if guid is empty delete employee from shift
-            if (!cmd.Id.Equals(Guid.Empty))
+            if (cmd.Id.Equals(Guid.Empty))
             {
                 var assignedUser = new WorkSchedule
                 {
@@ -31,7 +31,7 @@ namespace Management.Domain.Handlers
                     ShiftId = cmd.ShiftId
                 };
 
-                var result = await _workScheduleRepository.InsertAsync(assignedUser);
+                var result = await _workScheduleRepository.DeleteByTAsync(assignedUser);
                 
                 return new IdResponse(assignedUser.Id);
             }
@@ -39,11 +39,13 @@ namespace Management.Domain.Handlers
             var shift = await _workScheduleRepository.GetByIdAsync(cmd.ShiftId);
             await _workScheduleRepository.DeleteByTAsync(shift);
 
-           /* var shiftToUpdate = await _shiftRepository.GetByIdAsync(cmd.ShiftId);
-            shiftToUpdate.EmployeeOnShift = cmd.Id;
-            var result1 = await _shiftRepository.UpdateAsync(shiftToUpdate);
-*/            
-            return new IdResponse(Guid.Empty);
+            await _workScheduleRepository.InsertAsync(new WorkSchedule
+            {
+                Id = cmd.Id,
+                ShiftId = cmd.ShiftId
+            });
+            
+            return new IdResponse(cmd.Id);
 
         }
     }

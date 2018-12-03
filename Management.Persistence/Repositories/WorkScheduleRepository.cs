@@ -34,7 +34,7 @@ namespace Management.Persistence.Repositories
             using (var conn = new NpgsqlConnection(_connectionString.GetConnectionString()))
             {
                 var result =  conn.QueryAsync<Model.UserShiftDetailed>( 
-                    "select users.name , shifts.shiftstart , shifts.shiftend , users.id from hasshift , shifts , users Where (hasshift.shiftid = shifts.id and hasshift.employeeid = users.id)").Result.ToList();
+                    "select users.name , shifts.shiftstart , shifts.shiftend , users.id , hasshift.shiftid from hasshift , shifts , users Where (hasshift.shiftid = shifts.id and hasshift.employeeid = users.id)").Result.ToList();
 
 
 

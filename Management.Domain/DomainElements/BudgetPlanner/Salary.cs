@@ -171,7 +171,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
                 }
             }
 
-            return new SortedWorkHours(hours, supplementHours);
+            return new SortedWorkHours(hours, supplementHours.ToExtendedSuppList());
         }
 
         private int[] GetHoursBetween(int fromHour, int toHour)

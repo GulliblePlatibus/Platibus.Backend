@@ -34,7 +34,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
             foreach (var supplementHour in SortedWorkHours.SupplementHours)
             {
-                var suppInfo = supplementHour.Key;
+                var suppInfo = supplementHour;
                 var suppHours = supplementHour.Value;
                 var supplement = suppInfo.Supplement;
                 
