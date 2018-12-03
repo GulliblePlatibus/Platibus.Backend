@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Documents", "Management.Documents\Management.Documents.csproj", "{C5110BE3-81E3-4E1E-8C0C-7C4510CC8C91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.UnitTest", "Management.UnitTest\Management.UnitTest.csproj", "{AAF5BFDD-BDD5-471C-9A75-796B013C097B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Integration.Test", "Management.UnitTest\Management.Integration.Test.csproj", "{AAF5BFDD-BDD5-471C-9A75-796B013C097B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
