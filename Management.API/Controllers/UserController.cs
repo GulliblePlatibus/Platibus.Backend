@@ -163,7 +163,7 @@ namespace Management.API.Controllers
                     userRequestModel.Email = user.Email;
                 if (userRequestModel.AccessLevel == 0)
                     userRequestModel.AccessLevel = user.AccessLevel;
-                if (userRequestModel.Wage != Double.NegativeInfinity)
+                if (userRequestModel.Wage == 0)
                     userRequestModel.Wage = user.BaseWage;
             }
 
