@@ -35,12 +35,10 @@ namespace Management.Test
             
             SalaryConfiguration conf = new SalaryConfiguration();
             List<DayOfWeek> days =  new List<DayOfWeek>();
-            days.Add((DayOfWeek.Thursday));
-            days.Add(DayOfWeek.Friday);
             days.Add(DayOfWeek.Saturday);
             days.Add(DayOfWeek.Sunday);
             List<HourInfo> hours = new List<HourInfo>();
-            hours.Add(new HourInfo(16,00));
+            hours.Add(new HourInfo(00,24));
             conf.UseQuarterTimeScheduling();
             
             
