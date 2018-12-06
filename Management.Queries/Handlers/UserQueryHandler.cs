@@ -10,7 +10,7 @@ using Management.Persistence.Repositories;
 namespace Management.Queries.Handlers
 {
 	public class UserQueryHandler :
-	IQueryHandler<GetUserQuery, User>
+	IQueryHandler<GetUserQuery, User> , IQueryHandler<LoginQuery, User>
     {
 		private readonly IUserRepository userRepository;
 
@@ -24,5 +24,10 @@ namespace Management.Queries.Handlers
 			//Read a user from database!!!
 			return await userRepository.GetById(query.UserId);
 		}
-	}
+
+	    public async Task<User> HandleAsync(LoginQuery query, CancellationToken ct)
+	    {
+		    return await userRepository.Login(query.Email, query.Password);
+	    }
+    }
 }

@@ -2,52 +2,41 @@
 using System.Threading.Tasks;
 using Management.Persistence.Model;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using Dapper;
 using Management.Documents.Documents;
+using Management.Persistence.Helpers;
+using Npgsql;
 
 namespace Management.Persistence.Repositories
 {
-    public interface IUserRepository
-	{
-		Task<User> GetById(Guid id);
-		Task<Response> InsertUser(User user);
-	}
-
-	public class UserRepository : IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
+	   
+    }
 
-		private List<User> UserStore = new List<User>();
+	public class UserRepository : BaseRepository<User>, IUserRepository
+	{
+		//***********************PROPERTIES ***************************
 
-        public UserRepository()
-        {
-            //Do database config here!
-        }
+		private readonly IConnectionString connectionString;
 
-		public async Task<User> GetById(Guid id)
+
+
+
+
+		//**********************CONSTRUCTOR ****************************
+
+		public UserRepository(IConnectionString _connectionString) : base(_connectionString)
 		{
-			await Task.Delay(1000);
-
-			foreach(var user in UserStore)
-			{
-				if(user.Id.Equals(id))
-				{
-					return user;
-				}
-			}
-			return null;
+			connectionString = _connectionString;
 		}
 
-		public async Task<Response> InsertUser(User user)
-		{
-			await Task.Delay(1000);
-			foreach(var u in UserStore)
-			{
-				if(u.Id.Equals(user.Id))
-				{
-					return new Response(false, null, "User with id: " + user.Id + " already exists");
-				}
-			}
+		// ********************* METHODS *******************************
 
-			return Response.Success();
-		}
+
+		
 	}
 }

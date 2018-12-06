@@ -9,11 +9,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
-    <Folder Include="Handlers\" />
+    <Folder Include="CommandHandlers\" />
     <Folder Include="Registry\" />
     <Folder Include="Documents\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="3.1.0" />
+    <PackageReference Include="EmailValidation" Version="1.0.3" />
     <PackageReference Include="SimpleSoft.Mediator.Abstractions" Version="1.0.0" />
     <PackageReference Include="StructureMap" Version="4.7.0" />
   </ItemGroup>

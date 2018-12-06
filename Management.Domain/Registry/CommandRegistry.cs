@@ -13,6 +13,7 @@ namespace Management.Domain.Registry
 
 				//Scanning conventions, instead of defining each new handler in the this component we tell structuremap to look for all class implementing respective interfaces
 				scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
+				scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));
 			});
         }
     }

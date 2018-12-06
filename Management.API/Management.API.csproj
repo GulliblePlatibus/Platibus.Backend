@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper.FluentMap.Dommel" Version="1.5.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0-preview1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Examples" Version="2.9.0" />
@@ -21,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Management.Resources\Management.Infrastructure.csproj" />
     <ProjectReference Include="..\Management.Domain\Management.Domain.csproj" />
-    <ProjectReference Include="..\Management.Queries\Management.Queries.csproj" />
     <ProjectReference Include="..\Management.Persistence\Management.Persistence.csproj" />
   </ItemGroup>
 </Project>
