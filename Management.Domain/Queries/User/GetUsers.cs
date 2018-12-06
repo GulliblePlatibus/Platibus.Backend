@@ -4,7 +4,7 @@ using SimpleSoft.Mediator;
 
 namespace Management.Domain.Queries
 {
-    public class GetUsers : Query<IEnumerable<User>>
+    public class GetUsers : Query<IEnumerable<Persistence.Model.User>>
     {
         
 

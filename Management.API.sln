@@ -1,15 +1,20 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.API", "Management.API\Management.API.csproj", "{E367D6C8-08FD-428A-9D7E-31922FBD2EBB}"
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.API", "Management.API\Management.API.csproj", "{E367D6C8-08FD-428A-9D7E-31922FBD2EBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Persistence", "Management.Persistence\Management.Persistence.csproj", "{8158F8FE-C798-4585-8D74-9931253A2560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Persistence", "Management.Persistence\Management.Persistence.csproj", "{8158F8FE-C798-4585-8D74-9931253A2560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Domain", "Management.Domain\Management.Domain.csproj", "{1C2BA1AD-9566-428B-A6D8-47E247701C67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Domain", "Management.Domain\Management.Domain.csproj", "{1C2BA1AD-9566-428B-A6D8-47E247701C67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Infrastructure", "Management.Resources\Management.Infrastructure.csproj", "{914556CF-E067-4B55-A83C-E60D0AF44BF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Infrastructure", "Management.Resources\Management.Infrastructure.csproj", "{914556CF-E067-4B55-A83C-E60D0AF44BF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Documents", "Management.Documents\Management.Documents.csproj", "{C5110BE3-81E3-4E1E-8C0C-7C4510CC8C91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Documents", "Management.Documents\Management.Documents.csproj", "{C5110BE3-81E3-4E1E-8C0C-7C4510CC8C91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.Integration.Test", "Management.UnitTest\Management.Integration.Test.csproj", "{AAF5BFDD-BDD5-471C-9A75-796B013C097B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Test", "Management.Test\Management.Test.csproj", "{9E195D87-4163-4E7F-A991-BB3D87E02EC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,7 +42,19 @@ Global
 		{C5110BE3-81E3-4E1E-8C0C-7C4510CC8C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5110BE3-81E3-4E1E-8C0C-7C4510CC8C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5110BE3-81E3-4E1E-8C0C-7C4510CC8C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF5BFDD-BDD5-471C-9A75-796B013C097B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF5BFDD-BDD5-471C-9A75-796B013C097B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF5BFDD-BDD5-471C-9A75-796B013C097B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF5BFDD-BDD5-471C-9A75-796B013C097B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E195D87-4163-4E7F-A991-BB3D87E02EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E195D87-4163-4E7F-A991-BB3D87E02EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E195D87-4163-4E7F-A991-BB3D87E02EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E195D87-4163-4E7F-A991-BB3D87E02EC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A261D3BD-333A-4722-B96D-5B8E57B50C2E}
 	EndGlobalSection
 EndGlobal

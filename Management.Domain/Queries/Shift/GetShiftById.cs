@@ -2,13 +2,13 @@ using System;
 using Management.Persistence.Model;
 using SimpleSoft.Mediator;
 
-namespace Management.Domain.Queries
+namespace Management.Domain.Queries.Shift
 {
-    public class GetUserById : Query<User>
+    public class GetShiftById : Query<Persistence.Model.Shift>
     {
         public Guid Id { get; set; }
 
-        public GetUserById(Guid id)
+        public GetShiftById(Guid id)
         {
             Id = id;
         }

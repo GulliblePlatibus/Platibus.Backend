@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
+using Management.API.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -17,6 +18,7 @@ using StructureMap;
 using Management.API.Registry;
 using Management.Persistence.Helpers;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 
 namespace Management.API
 {
@@ -34,6 +36,8 @@ namespace Management.API
 		{
 			//Configure ConfigurationFiles
 			services.Configure<ElephantSQLConfiguration>(Configuration.GetSection(nameof(ElephantSQLConfiguration)));
+			services.Configure<IdentityServerConfiguration>(
+				Configuration.GetSection(nameof(IdentityServerConfiguration)));
 			
 			//API doesn't work without this is due to the fact that AddMVC adds both razor and json formatting that enabled the api to receive and transmit data smoothly --> https://offering.solutions/blog/articles/2017/02/07/difference-between-addmvc-addmvcore/
 			services.AddMvc();
@@ -66,15 +70,18 @@ namespace Management.API
 			//The api comes with standard dependency-injection, which is not that complicated nor have much functionality.
 			//So we can re-configure the IOC container with our StructureMapRegistry.
 			var container = new Container(new WebRegistry());
+            
 
-			
 			//Settings for Dapper fluentmap 
 			// Multiple ID's
 			// https://github.com/henkmollema/Dommel
 			FluentMapper.Initialize(options =>
 			{
-				
+				options.AddMap(new AssignedSuppMap());
+				options.AddMap(new SupplementInfoMap());
+				options.AddMap(new WorkScheduleMap());
 				options.AddMap(new UserMap());
+				options.AddMap(new ShiftMap());
 				options.ForDommel();
 				
 			});

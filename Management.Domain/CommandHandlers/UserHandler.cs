@@ -7,18 +7,20 @@ using EmailValidation;
 using Management.Documents.Documents;
 using Management.Persistence.Repositories;
 using Management.Persistence.Model;
+using Management.Persistence.Model.Budget;
 
 namespace Management.Domain.Handlers
 {
 	public class UserHandler : 
-	ICommandHandler<CreateUserCommand, IdResponse> , ICommandHandler<DeleteUserByIdCommand , IdResponse> , ICommandHandler<UpdateUserCommand , IdResponse>
+	ICommandHandler<CreateUserCommand, IdResponse>, ICommandHandler<DeleteUserByIdCommand, IdResponse>,
+		ICommandHandler<UpdateUserCommand, IdResponse>
     {
-		private readonly IUserRepository userRepository;
+		private readonly IUserRepository _userRepository;
 	   
 
 	    public UserHandler(IUserRepository userRepository)
 	    {
-		    this.userRepository = userRepository;
+		    _userRepository = userRepository;
 		   
 	    }
 
@@ -26,33 +28,24 @@ namespace Management.Domain.Handlers
 		{
 			//Do some logics, save the result in the persistence and return response indicating the succes state of the 
 
-			switch (cmd._acceslevel)
-			{
-				case 1:
-					// opret medarbejder
-					break;
-				case 2:
-					//opret mellemleder
-					break;
-				case 3:
-					// opret admini
-					break;
-			}
+			
 			
 			if (string.IsNullOrEmpty(cmd.Name))
 			{
 				return  IdResponse.Unsuccessful("cannot create user with an empty name");
 				
 			}
-			
-			var id = Guid.NewGuid();
 
-			var result = await userRepository.InsertAsync(new User()
+			var id = cmd.Id;
+
+			var result = await _userRepository.InsertAsync(new User
 			{
 				Email = cmd.Email,
 				Id = id,
 				Name = cmd.Name,
 				AccessLevel = cmd._acceslevel,
+				BaseWage = cmd.Wage,
+				EmploymentDate = cmd.EmploymentDate
 				
 			});
 /*
@@ -72,9 +65,9 @@ namespace Management.Domain.Handlers
 		    }
 		    
 
-		    var user = await userRepository.GetByIdAsync(cmd.Id);
+		    var user = await _userRepository.GetByIdAsync(cmd.Id);
 
-		    var result = await userRepository.DeleteByTAsync(user);
+		    var result = await _userRepository.DeleteByTAsync(user);
 		    return IdResponse.Successful(user.Id);
 	    }
 
@@ -90,13 +83,17 @@ namespace Management.Domain.Handlers
 			    Name = cmd.Name,
 			    Email = cmd.Email,
 			    AccessLevel = cmd.Acceslevel,
+			    BaseWage = cmd.Wage,
+			    EmploymentDate = cmd.EmploymentDate,
 			    Id = cmd.Id
 		    };
 
-		    var result = await userRepository.UpdateAsync(user);
+		    var result = await _userRepository.UpdateAsync(user);
 		    
 		    
 		    return IdResponse.Successful(user.Id);
 	    }
+	    
+	    
     }
 }
