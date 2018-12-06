@@ -9,7 +9,7 @@ namespace Management.API.RequestModels
         public string Email { get; set; }
         public string Password { get; set; }
         public UserRoles AccessLevel { get; set; }
-        public double Wage { get; set; }
+        public double BaseWage { get; set; }
         public DateTime EmploymentDate { get; set; }
         
     }

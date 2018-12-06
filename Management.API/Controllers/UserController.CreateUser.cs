@@ -62,7 +62,7 @@ namespace Management.API.Controllers
             var id = await ReadGuidFromResponse(identityResult);
  
             var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
-                new CreateUserCommand(id, requestModel.Name, requestModel.Email, requestModel.Password , requestModel.AccessLevel, requestModel.Wage, requestModel.EmploymentDate));
+                new CreateUserCommand(id, requestModel.Name, requestModel.Email, requestModel.Password , requestModel.AccessLevel, requestModel.BaseWage, requestModel.EmploymentDate));
             
             if (!response.IsSuccessful)
             {

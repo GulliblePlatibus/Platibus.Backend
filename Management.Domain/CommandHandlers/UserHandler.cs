@@ -44,7 +44,7 @@ namespace Management.Domain.Handlers
 				Id = id,
 				Name = cmd.Name,
 				AccessLevel = cmd._acceslevel,
-				BaseWage = cmd.Wage,
+				BaseWage = cmd.BaseWage,
 				EmploymentDate = cmd.EmploymentDate
 				
 			});
@@ -83,7 +83,7 @@ namespace Management.Domain.Handlers
 			    Name = cmd.Name,
 			    Email = cmd.Email,
 			    AccessLevel = cmd.Acceslevel,
-			    BaseWage = cmd.Wage,
+			    BaseWage = cmd.BaseWage,
 			    EmploymentDate = cmd.EmploymentDate,
 			    Id = cmd.Id
 		    };

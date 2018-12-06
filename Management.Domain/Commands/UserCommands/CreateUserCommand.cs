@@ -11,10 +11,10 @@ namespace Management.Domain.Commands
 	    public string Name { get; }
 		public string Email { get; }
 		public string Password { get; }
-	    public double Wage { get; }
+	    public double BaseWage { get; }
 	    public DateTime EmploymentDate { get; }
 
-		public CreateUserCommand(Guid id, string name, string email, string password, UserRoles acceslevel, double wage , DateTime employmentDate)
+		public CreateUserCommand(Guid id, string name, string email, string password, UserRoles acceslevel, double baseWage , DateTime employmentDate)
 		{
 			if (id.Equals(Guid.Empty))
 			{
@@ -26,7 +26,7 @@ namespace Management.Domain.Commands
 			Name = name;
 			Email = email;
 			Password = password;
-			Wage = wage;
+			BaseWage = baseWage;
 			EmploymentDate = employmentDate;
 
 

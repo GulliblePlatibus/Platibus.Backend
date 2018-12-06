@@ -66,7 +66,7 @@ namespace Management.UnitTest.User.Controllers
                 Name = testUser.Name,
                 Email = testUser.Email,
                 AccessLevel = testUser.AccessLevel,
-                Wage = testUser.BaseWage,
+                BaseWage = testUser.BaseWage,
                 EmploymentDate = testUser.EmploymentDate,
                 Password = "testpassword"
             });
