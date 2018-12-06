@@ -28,7 +28,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
         private void CalculateTotalPayment()
         {
-            var calculatedBaseWage = BaseWage * Seniority;
+            var calculatedBaseWage = BaseWage + (((BaseWage / 100) * 3) * Seniority);
 
             var totalPaymentForHours = SortedWorkHours.Hours * calculatedBaseWage;
 
