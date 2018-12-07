@@ -42,11 +42,15 @@ namespace Management.API
 			//API doesn't work without this is due to the fact that AddMVC adds both razor and json formatting that enabled the api to receive and transmit data smoothly --> https://offering.solutions/blog/articles/2017/02/07/difference-between-addmvc-addmvcore/
 			services.AddMvc();
 
+
+			var identityConfig = Configuration.GetSection(nameof(IdentityServerConfiguration))
+				.Get<IdentityServerConfiguration>();
+			
 			//Configure Platibus.Backend to use identityServer
 			services.AddAuthentication("Bearer")
 				.AddIdentityServerAuthentication(x =>
 				{
-					x.Authority = "https://localhost:5001";
+					x.Authority = identityConfig.IdentityServerUrl;
 					x.RequireHttpsMetadata = false;
 					x.ApiName = "Platibus.Backend";
 				});
