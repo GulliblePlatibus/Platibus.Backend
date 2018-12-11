@@ -21,6 +21,7 @@ namespace Management.UnitTest.User.Controllers
         private IContainer container;
         private UserController userCon;
         private const string testEmail = "admin@admin.dk";
+        private Persistence.Model.User user;
 
         //Arrange, Act, Assert
 
@@ -29,26 +30,49 @@ namespace Management.UnitTest.User.Controllers
         {
             container = new Container(new Registry());
             userCon = container.GetInstance<UserController>();
+            user = GetTestUser().Result; 
         }
 
         [TestMethod]
-        public async Task GetAllUsers_NoParam_AssertedTypeOf()
+        public async Task Get_UserListReturnSuccessAndCorrectContentType()
         {
             var userList = getUserList().Result;
             foreach (var user in userList) Assert.IsTrue(user is Persistence.Model.User); 
         }
 
         [TestMethod]
-        public async Task GetBydId_TestUserAsParam_AssertedEqual()
+        public async Task Get_UserReturnSuccess()
         {
             var user = GetTestUser().Result;
             Assert.IsNotNull(user);
-            Assert.AreEqual(testEmail, user.Email); 
         }
 
         [TestMethod]
-        public async Task UpdateUser_TestUserAsParam_AssertIsTrue()
+        public async Task Get_UserCorrectContentType()
         {
+            var user = GetTestUser().Result;
+            Assert.AreEqual(testEmail, user.Email);
+        }
+
+        [TestMethod]
+        public async Task Post_UpdateSuccess()
+        {
+            var newName = "TEST";
+            var result = await userCon.UpdateUserByIdObjectAsParam(user.Id, new API.RequestModels.UpdateUserRequestModel
+            {
+                Name = newName
+            });
+            
+            var updatedUser = (Persistence.Model.User)userCon.GetById(user.Id).Result;
+            var updatedName = updatedUser.Name;
+
+            //Reset test user
+            var result2 = await userCon.UpdateUserByIdObjectAsParam(user.Id, new API.RequestModels.UpdateUserRequestModel
+            {
+                Name = "admin"
+            });
+
+            Assert.AreEqual(newName, updatedName); 
 
         }
         
