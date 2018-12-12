@@ -20,7 +20,7 @@ namespace Management.UnitTest.User.Controllers
     {
         private IContainer container;
         private UserController userCon;
-        private const string testEmail = "admin@admin.dk";
+        private const string testEmail = "employee@employee.dk";
         private Persistence.Model.User user;
 
         //Arrange, Act, Assert
@@ -32,12 +32,22 @@ namespace Management.UnitTest.User.Controllers
             userCon = container.GetInstance<UserController>();
             user = GetTestUser().Result; 
         }
-
+        [TestMethod]
+        public async Task Get_ShiftsReturnSuccessAndCorrectContentType()
+        {
+            var result = userCon.GetShiftsForUserWithIdAsync(user.Id).Result as ObjectResult;
+            var value = result.Value as IEnumerable<Shift>;
+            List<Shift> list = value.ToList();
+            Assert.IsNotNull(list[0]); 
+        }
+        
         [TestMethod]
         public async Task Get_UserListReturnSuccessAndCorrectContentType()
         {
-            var userList = getUserList().Result;
-            foreach (var user in userList) Assert.IsTrue(user is Persistence.Model.User); 
+            var result = userCon.GetALLUsers().Result as ObjectResult;
+            var userlist = (List<Persistence.Model.User>)result.Value;
+
+            Assert.IsTrue(userlist is List<Persistence.Model.User>); 
         }
 
         [TestMethod]
@@ -45,6 +55,7 @@ namespace Management.UnitTest.User.Controllers
         {
             var user = GetTestUser().Result;
             Assert.IsNotNull(user);
+            Assert.IsTrue(user is Persistence.Model.User); 
         }
 
         [TestMethod]
@@ -74,6 +85,19 @@ namespace Management.UnitTest.User.Controllers
 
             Assert.AreEqual(newName, updatedName); 
 
+        }
+
+        [TestMethod]
+        public async Task Get_SalaryReturnSuccessCorrectContentType()
+        {
+            //Arrange
+            var result = userCon.GetSalaryForUserWithIdAsync(user.Id, DateTime.Now.AddYears(-10).Ticks, DateTime.Now.Ticks).Result as ObjectResult;
+
+            //Act
+            var ShiftPaymentList = (List<Domain.DomainElements.BudgetPlanner.ShiftPayment>)result.Value;
+            
+            //Assert
+            Assert.IsTrue(ShiftPaymentList is List<Domain.DomainElements.BudgetPlanner.ShiftPayment>);
         }
         
         private async Task<Management.Persistence.Model.User> GetTestUser()

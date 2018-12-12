@@ -20,7 +20,7 @@ namespace Management.API.Controllers
     public partial class UserController : BaseController
     {
         [HttpPut]
-        [Route("{id}")]
+        [Route("test/{id}")]
         public async Task<IActionResult> UpdateUserByIdObjectAsParam(Guid id, UpdateUserRequestModel userRequestModel)
         {
             //*****************Calls update controller on Identity API, so the db is synced***************************
