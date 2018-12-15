@@ -17,21 +17,21 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         public SortedSupplements SortedSupplements { get; private set; }
 
         private double Seniority;
-        private double Wage;
+        private double BaseWage;
         
         public Salary(User user, ISalaryConfiguration salaryConfig)
         {
             _salaryConfig = salaryConfig;
             User = user;
             Seniority = ResolveSeniority(user);
-            Wage = user.BaseWage;
+            BaseWage = user.BaseWage;
         }
         
         public ShiftPayment ResolvePaymentsForShift(Shift shift)
         {
             var resolvedWorkHours = ResolveWorkHours(shift);
             
-            var shiftPayment = new ShiftPayment(User.Id, Seniority, Wage, shift, resolvedWorkHours);
+            var shiftPayment = new ShiftPayment(User.Id, Seniority, BaseWage, shift, resolvedWorkHours);
             
             return shiftPayment;
         }

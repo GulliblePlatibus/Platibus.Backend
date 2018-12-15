@@ -11,7 +11,6 @@ namespace Management.Domain.DomainElements.BudgetPlanner
         public double BaseWage { get; }
         public Shift Shift { get; }
         public SortedWorkHours SortedWorkHours { get; }
-
         public double TotalPayment { get; private set; }
         
         public ShiftPayment(Guid userId, double seniority, double baseWage, Shift shift, SortedWorkHours sortedWorkHours)
@@ -28,7 +27,7 @@ namespace Management.Domain.DomainElements.BudgetPlanner
 
         private void CalculateTotalPayment()
         {
-            var calculatedBaseWage = BaseWage * Seniority;
+            var calculatedBaseWage = BaseWage +((BaseWage / 100) * Seniority);
 
             var totalPaymentForHours = SortedWorkHours.Hours * calculatedBaseWage;
 
