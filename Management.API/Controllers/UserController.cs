@@ -62,8 +62,20 @@ namespace Management.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteUserById(Guid id)
         {
+            var baseurl = _identityConfig.Value.IdentityServerUrl + "/identity/users/" + id;
+            var httpClient = new HttpClient();
+            var identityResult = await httpClient.DeleteAsync(baseurl);
+            if (!identityResult.IsSuccessStatusCode)
+            {
+                if(identityResult != null)
+                {
+                    var errorMsg = await identityResult.Content.ReadAsStringAsync();
+                    return StatusCode((int)identityResult.StatusCode, errorMsg);
+                }
+                return StatusCode((int)identityResult.StatusCode, identityResult.ReasonPhrase);
+            }
+
             var result = await CommandRouter.RouteAsync<DeleteUserByIdCommand, IdResponse>(new DeleteUserByIdCommand(id));
-            
             return new ObjectResult(result);
         }
 
