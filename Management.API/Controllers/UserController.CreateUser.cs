@@ -22,6 +22,7 @@ namespace Management.API.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestModel requestModel)
         {
+            /*
             //baseurl for creating user on identityServer
             var baseurl = _identityConfig.Value.IdentityServerUrl + "/identity/users";
             
@@ -57,9 +58,9 @@ namespace Management.API.Controllers
                 }
                 return StatusCode((int)identityResult.StatusCode, identityResult.ReasonPhrase);
             }
-
+*/
             //Since the result was succesfull, try and read the result for an id generated from the identityServer
-            var id = await ReadGuidFromResponse(identityResult);
+            var id = Guid.NewGuid();
  
             var response = await CommandRouter.RouteAsync<CreateUserCommand, IdResponse>(
                 new CreateUserCommand(id, requestModel.Name, requestModel.Email, requestModel.Password , requestModel.AccessLevel, requestModel.BaseWage, requestModel.EmploymentDate));

@@ -46,6 +46,7 @@ namespace Management.API
 			var identityConfig = Configuration.GetSection(nameof(IdentityServerConfiguration))
 				.Get<IdentityServerConfiguration>();
 			
+			/*
 			//Configure Platibus.Backend to use identityServer
 			services.AddAuthentication("Bearer")
 				.AddIdentityServerAuthentication(x =>
@@ -55,7 +56,7 @@ namespace Management.API
 					x.ApiName = "Platibus.Backend";
 				});
 			services.AddAuthorization();
-
+*/
 			services.AddCors();
             //For fun swagger settings...
 			services.AddSwaggerGen(c =>
